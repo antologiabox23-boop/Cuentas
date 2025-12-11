@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Antologia Box23 - Mis Cuentas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/brands.min.css">
     <style>
         :root {
             --primary-color: #4a6fa5;
@@ -13,11 +12,8 @@
             --success-color: #28a745;
             --danger-color: #dc3545;
             --warning-color: #ffc107;
-            --light-color: #f8f9fa;
-            --dark-color: #343a40;
             --border-radius: 10px;
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
         }
 
         * {
@@ -30,7 +26,6 @@
         body {
             background-color: #f5f7fa;
             color: #333;
-            line-height: 1.6;
             padding-bottom: 80px;
         }
 
@@ -47,20 +42,6 @@
             border-radius: 0 0 var(--border-radius) var(--border-radius);
             box-shadow: var(--box-shadow);
             margin-bottom: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
         }
 
         .logo-container {
@@ -82,14 +63,9 @@
             font-weight: 700;
         }
 
-        .app-subtitle {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-
         .total-display {
             background-color: white;
-            color: var(--dark-color);
+            color: #333;
             padding: 10px 15px;
             border-radius: var(--border-radius);
             font-weight: bold;
@@ -118,7 +94,6 @@
             padding: 15px 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
             border-bottom: 3px solid transparent;
         }
 
@@ -130,16 +105,10 @@
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.5s ease;
         }
 
         .tab-content.active {
             display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .account-cards {
@@ -154,12 +123,7 @@
             border-radius: var(--border-radius);
             padding: 15px;
             box-shadow: var(--box-shadow);
-            transition: var(--transition);
             border-left: 5px solid var(--primary-color);
-        }
-
-        .account-card:hover {
-            transform: translateY(-5px);
         }
 
         .account-card.nequi {
@@ -185,6 +149,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .account-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
 
         .account-balance {
@@ -242,7 +212,6 @@
         .transaction-actions {
             display: flex;
             gap: 10px;
-            margin-left: 10px;
         }
 
         .action-btn {
@@ -256,7 +225,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
         }
 
         .edit-btn {
@@ -264,30 +232,15 @@
             background-color: rgba(74, 111, 165, 0.1);
         }
 
-        .edit-btn:hover {
-            background-color: rgba(74, 111, 165, 0.2);
-        }
-
         .delete-btn {
             color: var(--danger-color);
             background-color: rgba(220, 53, 69, 0.1);
         }
 
-        .delete-btn:hover {
-            background-color: rgba(220, 53, 69, 0.2);
-        }
-
-        .floating-buttons {
+        .floating-button {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        }
-
-        .floating-button {
             width: 60px;
             height: 60px;
             background-color: var(--primary-color);
@@ -299,22 +252,7 @@
             font-size: 1.8rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: var(--transition);
             border: none;
-        }
-
-        .floating-button:hover {
-            background-color: var(--secondary-color);
-            transform: scale(1.1);
-        }
-
-        .floating-button.secondary {
-            background-color: var(--warning-color);
-            color: var(--dark-color);
-        }
-
-        .floating-button.secondary:hover {
-            background-color: #e0a800;
         }
 
         .modal {
@@ -329,7 +267,6 @@
             justify-content: center;
             align-items: center;
             padding: 15px;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal.active {
@@ -343,13 +280,6 @@
             max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.4s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .modal-header {
@@ -377,13 +307,12 @@
             color: #555;
         }
 
-        .form-input, .form-select, .form-file {
+        .form-input, .form-select {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #ddd;
             border-radius: var(--border-radius);
             font-size: 1rem;
-            transition: var(--transition);
         }
 
         .form-input:focus, .form-select:focus {
@@ -403,9 +332,7 @@
             border: none;
             border-radius: var(--border-radius);
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
-            transition: var(--transition);
         }
 
         .btn-primary {
@@ -413,17 +340,9 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-        }
-
         .btn-secondary {
             background-color: #e9ecef;
-            color: var(--dark-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: #dee2e6;
+            color: #333;
         }
 
         .btn-danger {
@@ -431,57 +350,9 @@
             color: white;
         }
 
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
         .btn-success {
             background-color: var(--success-color);
             color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ccc;
-        }
-
-        .summary-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 20px;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .summary-item {
-            text-align: center;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: var(--border-radius);
-        }
-
-        .summary-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 5px;
         }
 
         .backup-section {
@@ -507,25 +378,12 @@
             background-color: #f8f9fa;
             border-radius: var(--border-radius);
             border: 2px dashed #ddd;
-            transition: var(--transition);
             cursor: pointer;
         }
 
         .backup-option:hover {
             border-color: var(--primary-color);
             background-color: rgba(74, 111, 165, 0.05);
-        }
-
-        .backup-option i {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-
-        .info-text {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 5px;
         }
 
         .warning-box {
@@ -535,72 +393,6 @@
             padding: 15px;
             border-radius: var(--border-radius);
             margin-top: 15px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .account-cards {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-buttons {
-                flex-direction: column;
-            }
-            
-            .backup-options {
-                flex-direction: column;
-            }
-            
-            .floating-buttons {
-                bottom: 70px;
-                right: 15px;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .logo-container {
-                width: 100%;
-                justify-content: space-between;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .account-cards {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .install-prompt {
-            background-color: var(--warning-color);
-            color: var(--dark-color);
-            padding: 12px 15px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--box-shadow);
-            display: none;
-        }
-
-        .install-prompt button {
-            background-color: var(--dark-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
         }
 
         .file-info {
@@ -611,236 +403,142 @@
             font-size: 0.9rem;
         }
 
-        .account-icon {
-            font-size: 1.2rem;
-            width: 24px;
-            text-align: center;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 3000;
+            max-width: 300px;
         }
 
-        .logo-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b6b, #4a6fa5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border: 2px solid white;
+        @media (max-width: 600px) {
+            .account-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+            
+            .backup-options {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Encabezado de la aplicación -->
+    <!-- Encabezado -->
     <header>
-        <div class="header-content">
-            <div class="logo-container">
-                <div id="userLogo" class="logo-placeholder">
-                    A
-                </div>
-                <div>
-                    <div class="app-name">AntoLogia Box23</div>
-                    <div class="app-subtitle">CENTRO DE ACONDICIONAMIENTO FÍSICO</div>
-                </div>
-            </div>
+        <div class="logo-container">
+            <img src="antologia_logo.png" alt="Antologia Box23 Logo" class="logo-img" id="userLogo">
             <div>
-                <i class="fas fa-user-circle" style="font-size: 2rem; display: none;"></i>
+                <div class="app-name">Antologia Box23</div>
+                <div style="font-size: 0.8rem;">CENTRO DE ACONDICIONAMIENTO FÍSICO</div>
             </div>
         </div>
         <div class="total-display">
             <div>Total General</div>
-            <div class="total-amount" id="totalGeneral">$ 3,236,713</div>
+            <div class="total-amount" id="totalGeneral">$ 0</div>
         </div>
     </header>
 
     <div class="container">
-        <!-- Pestañas de navegación -->
+        <!-- Pestañas -->
         <div class="tabs">
             <div class="tab active" data-tab="resumen"><i class="fas fa-chart-pie"></i> Resumen</div>
             <div class="tab" data-tab="transacciones"><i class="fas fa-list"></i> Transacciones</div>
-            <div class="tab" data-tab="cuentas"><i class="fas fa-credit-card"></i> Cuentas</div>
             <div class="tab" data-tab="respaldos"><i class="fas fa-database"></i> Respaldos</div>
         </div>
 
-        <!-- Contenido de Resumen -->
+        <!-- Resumen -->
         <div class="tab-content active" id="resumen">
-            <div class="summary-section">
-                <h2><i class="fas fa-chart-line"></i> Resumen Financiero</h2>
-                <p>Vista general de todas tus cuentas</p>
-                
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div>Nequi</div>
-                        <div class="summary-value positive" id="totalNequi">$ 219,983</div>
-                    </div>
-                    <div class="summary-item">
-                        <div>Bancolombia</div>
-                        <div class="summary-value positive" id="totalBancolombia">$ 1,657,660</div>
-                    </div>
-                    <div class="summary-item">
-                        <div>Daviplata</div>
-                        <div class="summary-value positive" id="totalDaviplata">$ 167,936</div>
-                    </div>
-                    <div class="summary-item">
-                        <div>Efectivo</div>
-                        <div class="summary-value positive" id="totalEfectivo">$ 1,191,134</div>
-                    </div>
-                </div>
-            </div>
-
             <div class="account-cards">
                 <div class="account-card nequi">
                     <div class="account-name">
-                        <i class="fab fa-cc-amazon-pay account-icon"></i> Nequi
+                        <img src="nequi-icon.png" alt="Nequi" class="account-icon">
+                        Nequi
                     </div>
-                    <div class="account-balance positive" id="nequiBalance">$ 219,983</div>
-                    <div class="account-detail" style="font-size: 0.85rem; color: #666; margin-top: 5px;">
-                        Última transacción: 04/12/2025
-                    </div>
+                    <div class="account-balance positive" id="nequiBalance">$ 0</div>
                 </div>
                 
                 <div class="account-card bancolombia">
                     <div class="account-name">
-                        <i class="fas fa-university account-icon"></i> Bancolombia
+                        <img src="bancolombia-icon.png" alt="Bancolombia" class="account-icon">
+                        Bancolombia
                     </div>
-                    <div class="account-balance positive" id="bancolombiaBalance">$ 1,657,660</div>
-                    <div class="account-detail" style="font-size: 0.85rem; color: #666; margin-top: 5px;">
-                        Última transacción: 09/12/2025
-                    </div>
+                    <div class="account-balance positive" id="bancolombiaBalance">$ 0</div>
                 </div>
                 
                 <div class="account-card daviplata">
                     <div class="account-name">
-                        <img class="fas daviplata-icon account-icon"></img> Daviplata
+                        <img src="daviplata-icon.png" alt="Daviplata" class="account-icon">
+                        Daviplata
                     </div>
-                    <div class="account-balance positive" id="daviplataBalance">$ 167,936</div>
-                    <div class="account-detail" style="font-size: 0.85rem; color: #666; margin-top: 5px;">
-                        Última transacción: 01/12/2025
-                    </div>
+                    <div class="account-balance positive" id="daviplataBalance">$ 0</div>
                 </div>
                 
                 <div class="account-card efectivo">
                     <div class="account-name">
-                        <i class="fas fa-money-bill account-icon"></i> Efectivo
+                        <img src="efectivo-icon.png" alt="Efectivo" class="account-icon">
+                        Efectivo
                     </div>
-                    <div class="account-balance positive" id="efectivoBalance">$ 1,191,134</div>
-                    <div class="account-detail" style="font-size: 0.85rem; color: #666; margin-top: 5px;">
-                        Última transacción: 09/12/2025
-                    </div>
+                    <div class="account-balance positive" id="efectivoBalance">$ 0</div>
                 </div>
             </div>
         </div>
 
-        <!-- Contenido de Transacciones -->
+        <!-- Transacciones -->
         <div class="tab-content" id="transacciones">
-            <h2 style="margin-bottom: 15px;">Transacciones Recientes</h2>
-            
             <div class="transactions-list" id="transactionsList">
-                <!-- Las transacciones se cargarán dinámicamente -->
-            </div>
-            
-            <div class="empty-state" id="emptyTransactions" style="display: none;">
-                <i class="fas fa-exchange-alt"></i>
-                <h3>No hay transacciones</h3>
-                <p>Añade tu primera transacción usando el botón +</p>
-            </div>
-        </div>
-
-        <!-- Contenido de Cuentas -->
-        <div class="tab-content" id="cuentas">
-            <h2 style="margin-bottom: 15px;">Mis Cuentas</h2>
-            
-            <div class="account-cards">
-                <div class="account-card nequi" data-account="nequi">
-                    <div class="account-name">
-                        <i class="fab fa-cc-amazon-pay account-icon"></i> Nequi
-                    </div>
-                    <div class="account-balance positive">$ 219,983</div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-primary" style="width: 100%; padding: 8px;" onclick="viewAccountDetails('nequi')">
-                            Ver Detalles
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="account-card bancolombia" data-account="bancolombia">
-                    <div class="account-name">
-                        <i class="fas fa-university account-icon"></i> Bancolombia
-                    </div>
-                    <div class="account-balance positive">$ 1,657,660</div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-primary" style="width: 100%; padding: 8px;" onclick="viewAccountDetails('bancolombia')">
-                            Ver Detalles
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="account-card daviplata" data-account="daviplata">
-                    <div class="account-name">
-                        <i class="fas fa-wallet account-icon"></i> Daviplata
-                    </div>
-                    <div class="account-balance positive">$ 167,936</div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-primary" style="width: 100%; padding: 8px;" onclick="viewAccountDetails('daviplata')">
-                            Ver Detalles
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="account-card efectivo" data-account="efectivo">
-                    <div class="account-name">
-                        <i class="fas fa-money-bill account-icon"></i> Efectivo
-                    </div>
-                    <div class="account-balance positive">$ 1,191,134</div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-primary" style="width: 100%; padding: 8px;" onclick="viewAccountDetails('efectivo')">
-                            Ver Detalles
-                        </button>
-                    </div>
+                <div style="text-align: center; padding: 40px 20px; color: #666;">
+                    <i class="fas fa-exchange-alt" style="font-size: 3rem; margin-bottom: 15px; color: #ccc;"></i>
+                    <h3>No hay transacciones</h3>
+                    <p>Añade tu primera transacción usando el botón +</p>
                 </div>
             </div>
         </div>
 
-        <!-- Contenido de Respaldos -->
+        <!-- Respaldos -->
         <div class="tab-content" id="respaldos">
-            <h2 style="margin-bottom: 15px;">Gestión de Respaldos</h2>
-            
             <div class="backup-section">
-                <h3><i class="fas fa-file-export"></i> Exportar Datos</h3>
-                <p>Descarga una copia de seguridad de tus datos en formato Excel o CSV.</p>
+                <h3><i class="fas fa-envelope"></i> Respaldar por Email</h3>
+                <p>Envía tus datos por correo electrónico para tener un respaldo seguro.</p>
                 
                 <div class="backup-options">
-                    <div class="backup-option" onclick="exportToExcel()">
-                        <i class="fas fa-file-excel"></i>
-                        <div>Exportar a Excel</div>
-                        <div class="info-text">Formato .xlsx compatible con Microsoft Excel</div>
+                    <div class="backup-option" onclick="sendBackupByEmail()">
+                        <i class="fas fa-paper-plane" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                        <div>Enviar por Email</div>
+                        <div style="font-size: 0.85rem; color: #666; margin-top: 5px;">
+                            Envía los datos a tu correo como archivo adjunto
+                        </div>
                     </div>
                     
-                    <div class="backup-option" onclick="exportToCSV()">
-                        <i class="fas fa-file-csv"></i>
-                        <div>Exportar a CSV</div>
-                        <div class="info-text">Formato .csv para abrir en cualquier editor</div>
+                    <div class="backup-option" onclick="downloadBackup()">
+                        <i class="fas fa-download" style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 10px;"></i>
+                        <div>Descargar CSV</div>
+                        <div style="font-size: 0.85rem; color: #666; margin-top: 5px;">
+                            Descarga un archivo CSV para guardar en tu dispositivo
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="backup-section">
                 <h3><i class="fas fa-file-import"></i> Importar Datos</h3>
-                <p>Carga un archivo Excel o CSV para restaurar tus datos.</p>
+                <p>Carga un archivo CSV para restaurar tus datos desde un respaldo.</p>
                 
                 <div class="warning-box">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <strong>Advertencia:</strong> Importar datos reemplazará todos los datos actuales. 
-                        Es recomendable exportar un respaldo antes de importar nuevos datos.
-                    </div>
+                    <strong>Advertencia:</strong> Importar datos reemplazará todos los datos actuales.
                 </div>
                 
                 <div class="form-group" style="margin-top: 20px;">
-                    <label class="form-label" for="backupFile">Seleccionar archivo de respaldo</label>
-                    <input type="file" class="form-file" id="backupFile" accept=".xlsx,.xls,.csv">
+                    <label class="form-label">Seleccionar archivo de respaldo (.csv)</label>
+                    <input type="file" class="form-input" id="backupFile" accept=".csv,.txt">
                     <div class="file-info" id="fileInfo" style="display: none;">
                         Archivo seleccionado: <span id="fileName"></span>
                     </div>
@@ -855,36 +553,20 @@
                     </button>
                 </div>
             </div>
-            
-            <div class="backup-section">
-                <h3><i class="fas fa-history"></i> Restaurar Datos de Ejemplo</h3>
-                <p>Vuelve a cargar los datos de ejemplo del Excel original.</p>
-                
-                <div class="form-buttons">
-                    <button type="button" class="btn btn-warning" onclick="restoreSampleData()">
-                        <i class="fas fa-redo"></i> Restaurar Datos de Ejemplo
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Botones flotantes -->
-    <div class="floating-buttons">
-        <button class="floating-button secondary" id="backupBtn" title="Respaldos">
-            <i class="fas fa-database"></i>
-        </button>
-        <button class="floating-button" id="addTransactionBtn" title="Nueva transacción">
-            <i class="fas fa-plus"></i>
-        </button>
+    <!-- Botón flotante -->
+    <div class="floating-button" id="addTransactionBtn">
+        <i class="fas fa-plus"></i>
     </div>
 
-    <!-- Modal para añadir/editar transacción -->
+    <!-- Modal para transacción -->
     <div class="modal" id="transactionModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Nueva Transacción</h2>
-                <i class="fas fa-times close-modal" style="cursor: pointer; font-size: 1.5rem;"></i>
+                <i class="fas fa-times close-modal" style="cursor: pointer;"></i>
             </div>
             <div class="modal-body">
                 <form id="transactionForm">
@@ -928,214 +610,96 @@
                     
                     <div class="form-buttons">
                         <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" id="submitTransactionBtn">Guardar Transacción</button>
-                        <button type="button" class="btn btn-danger" id="deleteTransactionBtn" style="display: none;">Eliminar Transacción</button>
+                        <button type="submit" class="btn btn-primary" id="submitTransactionBtn">Guardar</button>
+                        <button type="button" class="btn btn-danger" id="deleteTransactionBtn" style="display: none;">Eliminar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal para ver detalles de cuenta -->
-    <div class="modal" id="accountModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="accountModalTitle">Detalles de Cuenta</h2>
-                <i class="fas fa-times close-account-modal" style="cursor: pointer; font-size: 1.5rem;"></i>
-            </div>
-            <div class="modal-body">
-                <div id="accountDetails">
-                    <!-- Los detalles de la cuenta se cargarán aquí -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de confirmación -->
-    <div class="modal" id="confirmModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="confirmModalTitle">Confirmar Acción</h2>
-                <i class="fas fa-times close-confirm-modal" style="cursor: pointer; font-size: 1.5rem;"></i>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage">¿Estás seguro de que deseas realizar esta acción?</p>
-                <div class="form-buttons">
-                    <button type="button" class="btn btn-secondary close-confirm-modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmActionBtn">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Datos iniciales basados en el Excel proporcionado
+        // Datos iniciales vacíos
         let accounts = {
             nequi: {
                 name: "Nequi",
-                icon: "fab fa-cc-amazon-pay",
+                icon: "nequi-icon.png",
                 color: "nequi",
-                balance: 219983,
-                transactions: [
-                    { id: 1, date: "2025-12-01", concept: "Inicial", amount: 219983, type: "ingreso" },
-                    { id: 2, date: "2025-12-01", concept: "Nevera", amount: -82566, type: "egreso" },
-                    { id: 3, date: "2025-12-01", concept: "Leidy Aguilar", amount: 95000, type: "ingreso" },
-                    { id: 4, date: "2025-12-01", concept: "Cata", amount: 16000, type: "ingreso" },
-                    { id: 5, date: "2025-12-01", concept: "Nata Ramirez", amount: 95000, type: "ingreso" },
-                    { id: 6, date: "2025-12-01", concept: "Angelica Avila", amount: 32000, type: "ingreso" },
-                    { id: 7, date: "2025-12-04", concept: "Medias Caro", amount: 28000, type: "ingreso" }
-                ]
+                balance: 0,
+                transactions: []
             },
             bancolombia: {
                 name: "Bancolombia",
-                icon: "fas fa-university",
+                icon: "bancolombia-icon.png",
                 color: "bancolombia",
-                balance: 1657660,
-                transactions: [
-                    { id: 8, date: "2025-12-01", concept: "Inicial", amount: 1657660, type: "ingreso" },
-                    { id: 9, date: "2025-12-01", concept: "Geraldine", amount: 95000, type: "ingreso" },
-                    { id: 10, date: "2025-12-01", concept: "Ximena", amount: 100000, type: "ingreso" },
-                    { id: 11, date: "2025-12-01", concept: "Jessica", amount: 100000, type: "ingreso" },
-                    { id: 12, date: "2025-12-03", concept: "Jorge papa Malu", amount: 12000, type: "ingreso" },
-                    { id: 13, date: "2025-12-03", concept: "Pilar y Luci", amount: 24000, type: "ingreso" },
-                    { id: 14, date: "2025-12-03", concept: "Felipe fontalvo", amount: 100000, type: "ingreso" },
-                    { id: 15, date: "2025-12-04", concept: "Katerin Dueñas", amount: 100000, type: "ingreso" },
-                    { id: 16, date: "2025-12-09", concept: "Kristell", amount: 203000, type: "ingreso" },
-                    { id: 17, date: "2025-12-09", concept: "Sneyder", amount: 200000, type: "ingreso" }
-                ]
+                balance: 0,
+                transactions: []
             },
             daviplata: {
                 name: "Daviplata",
-                icon: "fas fa-wallet",
+                icon: "daviplata-icon.png",
                 color: "daviplata",
-                balance: 167936,
-                transactions: [
-                    { id: 18, date: "2025-12-01", concept: "Inicial", amount: 167936, type: "ingreso" },
-                    { id: 19, date: "2025-12-01", concept: "Edison", amount: 12000, type: "ingreso" }
-                ]
+                balance: 0,
+                transactions: []
             },
             efectivo: {
                 name: "Efectivo",
-                icon: "fas fa-money-bill",
+                icon: "efectivo-icon.png",
                 color: "efectivo",
-                balance: 1191134,
-                transactions: [
-                    { id: 20, date: "2025-12-01", concept: "Inicial", amount: 1166000, type: "ingreso" },
-                    { id: 21, date: "2025-12-01", concept: "Energia", amount: -219540, type: "egreso" },
-                    { id: 22, date: "2025-12-01", concept: "Energia Tatis", amount: -115220, type: "egreso" },
-                    { id: 23, date: "2025-12-01", concept: "Agua", amount: -209590, type: "egreso" },
-                    { id: 24, date: "2025-12-01", concept: "Deuda Carlos", amount: -300900, type: "egreso" },
-                    { id: 25, date: "2025-12-01", concept: "Lina forero", amount: 100000, type: "ingreso" },
-                    { id: 26, date: "2025-12-01", concept: "Claudia Ye", amount: 100000, type: "ingreso" },
-                    { id: 27, date: "2025-12-01", concept: "Kimberly", amount: 100000, type: "ingreso" },
-                    { id: 28, date: "2025-12-01", concept: "Huevos Carlos", amount: -5000, type: "egreso" },
-                    { id: 29, date: "2025-12-01", concept: "Arroz Julian", amount: -50000, type: "egreso" },
-                    { id: 30, date: "2025-12-02", concept: "Joha nov dic", amount: 190000, type: "ingreso" },
-                    { id: 31, date: "2025-12-02", concept: "Paula Rive", amount: 100000, type: "ingreso" },
-                    { id: 32, date: "2025-12-02", concept: "Pedido", amount: -54000, type: "egreso" },
-                    { id: 33, date: "2025-12-03", concept: "Pedido cafe", amount: -40000, type: "egreso" },
-                    { id: 34, date: "2025-12-03", concept: "Pedido cafeteria", amount: -19700, type: "egreso" },
-                    { id: 35, date: "2025-12-03", concept: "Papel hig", amount: -5000, type: "egreso" },
-                    { id: 36, date: "2025-12-04", concept: "Andrea Barrera", amount: 100000, type: "ingreso" },
-                    { id: 37, date: "2025-12-04", concept: "Gloria", amount: 100000, type: "ingreso" },
-                    { id: 38, date: "2025-12-05", concept: "Mercado sancocho", amount: -110000, type: "egreso" },
-                    { id: 39, date: "2025-12-05", concept: "Carne sancocho", amount: -130000, type: "egreso" },
-                    { id: 40, date: "2025-12-05", concept: "Nancy", amount: 95000, type: "ingreso" },
-                    { id: 41, date: "2025-12-05", concept: "Samuel", amount: 95000, type: "ingreso" },
-                    { id: 42, date: "2025-12-06", concept: "Abono Juan Pablo", amount: 55000, type: "ingreso" },
-                    { id: 43, date: "2025-12-09", concept: "agua chupo", amount: -80000, type: "egreso" }
-                ]
+                balance: 0,
+                transactions: []
             }
         };
 
-        // Variables para controlar el estado de edición
         let isEditing = false;
         let currentEditId = null;
-        let currentEditAccount = null;
 
-        // Cargar datos desde localStorage si existen
+        // Cargar datos al iniciar
         document.addEventListener('DOMContentLoaded', function() {
-            // Intentar cargar datos guardados
             const savedAccounts = localStorage.getItem('accountsData');
             if (savedAccounts) {
                 accounts = JSON.parse(savedAccounts);
             }
             
-            // Configurar fecha actual por defecto
             document.getElementById('date').valueAsDate = new Date();
-            
-            // Inicializar la aplicación
             updateUI();
             loadTransactions();
-            
-            // Configurar eventos
             setupEventListeners();
-            
-            // Configurar eventos para el archivo de respaldo
             setupBackupFileListener();
             
-            // Intentar cargar el logo
-            loadLogo();
+            // Configurar iconos
+            setupIcons();
         });
 
-        // Cargar el logo de Antologia
-        function loadLogo() {
-            const logoElement = document.getElementById('userLogo');
-            
-            // Primero intentamos cargar la imagen del logo
-            const logoImg = document.createElement('img');
-            logoImg.src = 'antologia_logo.png';
-            logoImg.alt = 'Antologia Logo';
-            logoImg.className = 'logo-img';
-            logoImg.onload = function() {
-                // Si la imagen se carga correctamente, reemplazamos el placeholder
-                logoElement.innerHTML = '';
-                logoElement.appendChild(logoImg);
-                logoElement.className = '';
-            };
-            logoImg.onerror = function() {
-                // Si hay error, dejamos el placeholder con la letra A
-                console.log('No se pudo cargar el logo, usando placeholder');
-            };
+        // Configurar iconos
+        function setupIcons() {
+            // Los iconos ya están en el HTML como imágenes
+            // Esta función manejaría errores de carga si fuera necesario
+            const icons = ['nequi-icon.png', 'bancolombia-icon.png', 'daviplata-icon.png', 'efectivo-icon.png'];
+            icons.forEach(icon => {
+                const img = new Image();
+                img.src = icon;
+                img.onerror = function() {
+                    console.log('No se pudo cargar el icono:', icon);
+                };
+            });
         }
 
-        // Configurar event listeners
         function setupEventListeners() {
             // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    
-                    // Actualizar tabs activos
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    
-                    // Mostrar contenido correspondiente
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    document.getElementById(tabId).classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    document.getElementById(this.getAttribute('data-tab')).classList.add('active');
                 });
             });
             
             // Botón para añadir transacción
-            document.getElementById('addTransactionBtn').addEventListener('click', function() {
-                openTransactionModal();
-            });
+            document.getElementById('addTransactionBtn').addEventListener('click', openTransactionModal);
             
-            // Botón para respaldos
-            document.getElementById('backupBtn').addEventListener('click', function() {
-                // Ir a la pestaña de respaldos
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelector('[data-tab="respaldos"]').classList.add('active');
-                
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById('respaldos').classList.add('active');
-            });
-            
-            // Cerrar modales
+            // Cerrar modal
             document.querySelectorAll('.close-modal').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.getElementById('transactionModal').classList.remove('active');
@@ -1143,19 +707,7 @@
                 });
             });
             
-            document.querySelectorAll('.close-account-modal').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.getElementById('accountModal').classList.remove('active');
-                });
-            });
-            
-            document.querySelectorAll('.close-confirm-modal').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.getElementById('confirmModal').classList.remove('active');
-                });
-            });
-            
-            // Formulario de transacción
+            // Formulario
             document.getElementById('transactionForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (isEditing) {
@@ -1165,65 +717,30 @@
                 }
             });
             
-            // Botón de eliminar transacción
-            document.getElementById('deleteTransactionBtn').addEventListener('click', function() {
-                deleteTransaction();
-            });
-            
-            // Botón de confirmación en modal
-            document.getElementById('confirmActionBtn').addEventListener('click', function() {
-                const action = this.getAttribute('data-action');
-                
-                if (action === 'deleteTransaction') {
-                    confirmDeleteTransaction();
-                } else if (action === 'importData') {
-                    confirmImportData();
-                } else if (action === 'restoreSample') {
-                    confirmRestoreSampleData();
-                }
-            });
-            
-            // Cerrar modales al hacer clic fuera
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.classList.remove('active');
-                        if (this.id === 'transactionModal') {
-                            resetTransactionForm();
-                        }
-                    }
-                });
-            });
+            // Botón de eliminar
+            document.getElementById('deleteTransactionBtn').addEventListener('click', deleteTransaction);
         }
 
-        // Configurar listener para el archivo de respaldo
         function setupBackupFileListener() {
-            const backupFile = document.getElementById('backupFile');
-            const importBtn = document.getElementById('importBtn');
-            
-            backupFile.addEventListener('change', function() {
+            document.getElementById('backupFile').addEventListener('change', function() {
                 if (this.files.length > 0) {
-                    const file = this.files[0];
-                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileName').textContent = this.files[0].name;
                     document.getElementById('fileInfo').style.display = 'block';
-                    importBtn.disabled = false;
+                    document.getElementById('importBtn').disabled = false;
                 } else {
                     document.getElementById('fileInfo').style.display = 'none';
-                    importBtn.disabled = true;
+                    document.getElementById('importBtn').disabled = true;
                 }
             });
         }
 
-        // Actualizar la interfaz con los datos actuales
         function updateUI() {
-            // Calcular balances
             let totalGeneral = 0;
             
             for (const accountKey in accounts) {
                 const account = accounts[accountKey];
                 let balance = 0;
                 
-                // Calcular balance sumando transacciones
                 account.transactions.forEach(transaction => {
                     balance += transaction.amount;
                 });
@@ -1231,36 +748,22 @@
                 account.balance = balance;
                 totalGeneral += balance;
                 
-                // Actualizar elementos en la UI
                 const balanceElement = document.getElementById(`${accountKey}Balance`);
-                const totalElement = document.getElementById(`total${accountKey.charAt(0).toUpperCase() + accountKey.slice(1)}`);
-                
                 if (balanceElement) {
                     balanceElement.textContent = `$ ${formatNumber(balance)}`;
                     balanceElement.className = `account-balance ${balance >= 0 ? 'positive' : 'negative'}`;
                 }
-                
-                if (totalElement) {
-                    totalElement.textContent = `$ ${formatNumber(balance)}`;
-                    totalElement.className = `summary-value ${balance >= 0 ? 'positive' : 'negative'}`;
-                }
             }
             
-            // Actualizar total general
             document.getElementById('totalGeneral').textContent = `$ ${formatNumber(totalGeneral)}`;
         }
 
-        // Cargar transacciones en la lista
         function loadTransactions() {
             const transactionsList = document.getElementById('transactionsList');
-            const emptyTransactions = document.getElementById('emptyTransactions');
-            
-            // Obtener todas las transacciones de todas las cuentas
             let allTransactions = [];
             
             for (const accountKey in accounts) {
                 const account = accounts[accountKey];
-                
                 account.transactions.forEach(transaction => {
                     allTransactions.push({
                         ...transaction,
@@ -1270,25 +773,17 @@
                 });
             }
             
-            // Ordenar por fecha (más reciente primero)
             allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
             
-            // Mostrar transacciones
             if (allTransactions.length > 0) {
-                emptyTransactions.style.display = 'none';
                 transactionsList.innerHTML = '';
-                
-                // Mostrar solo las 20 transacciones más recientes
-                const recentTransactions = allTransactions.slice(0, 20);
-                
-                recentTransactions.forEach(transaction => {
-                    const transactionElement = document.createElement('div');
-                    transactionElement.className = 'transaction-item';
-                    
+                allTransactions.forEach(transaction => {
                     const amountClass = transaction.amount >= 0 ? 'positive' : 'negative';
                     const amountSign = transaction.amount >= 0 ? '+' : '';
                     const formattedDate = formatDate(transaction.date);
                     
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
                     transactionElement.innerHTML = `
                         <div class="transaction-info">
                             <div class="transaction-concept">${transaction.concept}</div>
@@ -1306,35 +801,24 @@
                             </button>
                         </div>
                     `;
-                    
                     transactionsList.appendChild(transactionElement);
                 });
-            } else {
-                emptyTransactions.style.display = 'block';
-                transactionsList.innerHTML = '';
             }
         }
 
-        // Abrir modal para nueva transacción
         function openTransactionModal() {
             isEditing = false;
             currentEditId = null;
-            currentEditAccount = null;
-            
             document.getElementById('modalTitle').textContent = 'Nueva Transacción';
-            document.getElementById('submitTransactionBtn').textContent = 'Guardar Transacción';
+            document.getElementById('submitTransactionBtn').textContent = 'Guardar';
             document.getElementById('deleteTransactionBtn').style.display = 'none';
-            
-            // Limpiar formulario
             document.getElementById('transactionForm').reset();
             document.getElementById('date').valueAsDate = new Date();
             document.getElementById('transactionId').value = '';
             document.getElementById('originalAccount').value = '';
-            
             document.getElementById('transactionModal').classList.add('active');
         }
 
-        // Abrir modal para editar transacción
         function editTransaction(accountKey, transactionId) {
             const account = accounts[accountKey];
             const transaction = account.transactions.find(t => t.id === transactionId);
@@ -1343,13 +827,11 @@
             
             isEditing = true;
             currentEditId = transactionId;
-            currentEditAccount = accountKey;
             
             document.getElementById('modalTitle').textContent = 'Editar Transacción';
-            document.getElementById('submitTransactionBtn').textContent = 'Actualizar Transacción';
+            document.getElementById('submitTransactionBtn').textContent = 'Actualizar';
             document.getElementById('deleteTransactionBtn').style.display = 'block';
             
-            // Llenar formulario con datos de la transacción
             document.getElementById('transactionId').value = transactionId;
             document.getElementById('originalAccount').value = accountKey;
             document.getElementById('account').value = accountKey;
@@ -1361,7 +843,6 @@
             document.getElementById('transactionModal').classList.add('active');
         }
 
-        // Añadir nueva transacción
         function addTransaction() {
             const account = document.getElementById('account').value;
             const type = document.getElementById('type').value;
@@ -1374,37 +855,24 @@
                 return;
             }
             
-            // Determinar el monto (negativo para egresos)
             const transactionAmount = type === 'egreso' ? -amount : amount;
-            
-            // Crear nueva transacción
             const newTransaction = {
-                id: Date.now(), // ID único basado en timestamp
+                id: Date.now(),
                 date: date,
                 concept: concept,
                 amount: transactionAmount,
                 type: type
             };
             
-            // Añadir a la cuenta correspondiente
             accounts[account].transactions.push(newTransaction);
-            
-            // Guardar en localStorage
             saveData();
-            
-            // Actualizar UI
             updateUI();
             loadTransactions();
-            
-            // Cerrar modal y limpiar formulario
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
-            
-            // Mostrar confirmación
-            showNotification(`Transacción de $${formatNumber(transactionAmount)} añadida a ${accounts[account].name}`, "success");
+            showNotification(`Transacción añadida a ${accounts[account].name}`, "success");
         }
 
-        // Actualizar transacción existente
         function updateTransaction() {
             const transactionId = parseInt(document.getElementById('transactionId').value);
             const originalAccount = document.getElementById('originalAccount').value;
@@ -1419,10 +887,7 @@
                 return;
             }
             
-            // Determinar el monto (negativo para egresos)
             const transactionAmount = type === 'egreso' ? -amount : amount;
-            
-            // Crear objeto de transacción actualizada
             const updatedTransaction = {
                 id: transactionId,
                 date: date,
@@ -1431,125 +896,54 @@
                 type: type
             };
             
-            // Si la cuenta cambió, mover la transacción
             if (originalAccount !== newAccount) {
-                // Eliminar de la cuenta original
                 accounts[originalAccount].transactions = accounts[originalAccount].transactions.filter(t => t.id !== transactionId);
-                
-                // Añadir a la nueva cuenta
                 accounts[newAccount].transactions.push(updatedTransaction);
             } else {
-                // Actualizar en la misma cuenta
                 const transactionIndex = accounts[originalAccount].transactions.findIndex(t => t.id === transactionId);
                 if (transactionIndex !== -1) {
                     accounts[originalAccount].transactions[transactionIndex] = updatedTransaction;
                 }
             }
             
-            // Guardar en localStorage
             saveData();
-            
-            // Actualizar UI
             updateUI();
             loadTransactions();
-            
-            // Cerrar modal y limpiar formulario
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
-            
-            // Mostrar confirmación
-            showNotification(`Transacción actualizada en ${accounts[newAccount].name}`, "success");
+            showNotification(`Transacción actualizada`, "success");
         }
 
-        // Mostrar confirmación para eliminar transacción
         function showDeleteConfirmation(accountKey, transactionId, concept) {
-            const account = accounts[accountKey];
-            const transaction = account.transactions.find(t => t.id === transactionId);
-            
-            if (!transaction) return;
-            
-            currentEditId = transactionId;
-            currentEditAccount = accountKey;
-            
-            document.getElementById('confirmModalTitle').textContent = 'Eliminar Transacción';
-            document.getElementById('confirmMessage').innerHTML = `
-                ¿Estás seguro de que deseas eliminar la transacción "<strong>${concept}</strong>" 
-                de <strong>${account.name}</strong> por un valor de <strong>$${formatNumber(transaction.amount)}</strong>?
-            `;
-            document.getElementById('confirmActionBtn').setAttribute('data-action', 'deleteTransaction');
-            document.getElementById('confirmActionBtn').textContent = 'Eliminar';
-            document.getElementById('confirmActionBtn').className = 'btn btn-danger';
-            
-            document.getElementById('confirmModal').classList.add('active');
-        }
-
-        // Eliminar transacción después de confirmación
-        function confirmDeleteTransaction() {
-            const account = accounts[currentEditAccount];
-            const transactionIndex = account.transactions.findIndex(t => t.id === currentEditId);
-            
-            if (transactionIndex !== -1) {
-                const deletedTransaction = account.transactions[transactionIndex];
-                
-                // Eliminar la transacción
-                account.transactions.splice(transactionIndex, 1);
-                
-                // Guardar en localStorage
-                saveData();
-                
-                // Actualizar UI
-                updateUI();
-                loadTransactions();
-                
-                // Cerrar modales
-                document.getElementById('confirmModal').classList.remove('active');
-                document.getElementById('transactionModal').classList.remove('active');
-                resetTransactionForm();
-                
-                // Mostrar confirmación
-                showNotification(`Transacción eliminada de ${account.name}`, "success");
+            if (confirm(`¿Eliminar transacción "${concept}"?`)) {
+                deleteTransactionConfirmed(accountKey, transactionId);
             }
-            
-            currentEditId = null;
-            currentEditAccount = null;
         }
 
-        // Función para eliminar transacción (sin confirmación, desde el modal de edición)
-        function deleteTransaction() {
-            const transactionId = parseInt(document.getElementById('transactionId').value);
-            const accountKey = document.getElementById('originalAccount').value;
+        function deleteTransactionConfirmed(accountKey, transactionId) {
             const account = accounts[accountKey];
-            
             const transactionIndex = account.transactions.findIndex(t => t.id === transactionId);
             
             if (transactionIndex !== -1) {
-                const deletedTransaction = account.transactions[transactionIndex];
-                
-                // Eliminar la transacción
                 account.transactions.splice(transactionIndex, 1);
-                
-                // Guardar en localStorage
                 saveData();
-                
-                // Actualizar UI
                 updateUI();
                 loadTransactions();
-                
-                // Cerrar modales
-                document.getElementById('transactionModal').classList.remove('active');
-                resetTransactionForm();
-                
-                // Mostrar confirmación
-                showNotification(`Transacción eliminada de ${account.name}`, "success");
+                showNotification(`Transacción eliminada`, "success");
             }
         }
 
-        // Resetear formulario de transacción
+        function deleteTransaction() {
+            const transactionId = parseInt(document.getElementById('transactionId').value);
+            const accountKey = document.getElementById('originalAccount').value;
+            deleteTransactionConfirmed(accountKey, transactionId);
+            document.getElementById('transactionModal').classList.remove('active');
+            resetTransactionForm();
+        }
+
         function resetTransactionForm() {
             isEditing = false;
             currentEditId = null;
-            currentEditAccount = null;
-            
             document.getElementById('transactionForm').reset();
             document.getElementById('date').valueAsDate = new Date();
             document.getElementById('transactionId').value = '';
@@ -1557,454 +951,173 @@
             document.getElementById('deleteTransactionBtn').style.display = 'none';
         }
 
-        // Ver detalles de una cuenta
-        function viewAccountDetails(accountKey) {
-            const account = accounts[accountKey];
-            const accountDetails = document.getElementById('accountDetails');
-            const modalTitle = document.getElementById('accountModalTitle');
+        // Funciones de respaldo
+        function sendBackupByEmail() {
+            const csvData = generateCSVData();
+            const filename = `antologia_cuentas_${new Date().toISOString().slice(0,10)}.csv`;
             
-            modalTitle.textContent = `Detalles de ${account.name}`;
-            
-            // Crear HTML para los detalles de la cuenta
-            let html = `
-                <div class="account-card ${account.color}" style="margin-bottom: 20px;">
-                    <div class="account-name">
-                        <i class="${account.icon}"></i> ${account.name}
-                    </div>
-                    <div class="account-balance ${account.balance >= 0 ? 'positive' : 'negative'}">
-                        $ ${formatNumber(account.balance)}
-                    </div>
-                </div>
-                
-                <h3 style="margin-bottom: 15px;">Transacciones (${account.transactions.length})</h3>
-            `;
-            
-            if (account.transactions.length > 0) {
-                // Ordenar transacciones por fecha (más reciente primero)
-                const sortedTransactions = [...account.transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
-                
-                sortedTransactions.forEach(transaction => {
-                    const amountClass = transaction.amount >= 0 ? 'positive' : 'negative';
-                    const amountSign = transaction.amount >= 0 ? '+' : '';
-                    const formattedDate = formatDate(transaction.date);
-                    
-                    html += `
-                        <div class="transaction-item">
-                            <div class="transaction-info">
-                                <div class="transaction-concept">${transaction.concept}</div>
-                                <div class="transaction-date">${formattedDate}</div>
-                            </div>
-                            <div class="transaction-amount ${amountClass}">
-                                ${amountSign}$ ${formatNumber(transaction.amount)}
-                            </div>
-                            <div class="transaction-actions">
-                                <button class="action-btn edit-btn" onclick="editTransaction('${accountKey}', ${transaction.id})">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete-btn" onclick="showDeleteConfirmation('${accountKey}', ${transaction.id}, '${transaction.concept}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                html += `<div class="empty-state" style="padding: 20px 0;">
-                    <i class="fas fa-exchange-alt"></i>
-                    <p>No hay transacciones en esta cuenta</p>
-                </div>`;
-            }
-            
-            accountDetails.innerHTML = html;
-            document.getElementById('accountModal').classList.add('active');
-        }
-
-        // Exportar datos a Excel
-        function exportToExcel() {
-            // Crear un libro de Excel
-            let csvContent = "Cuenta,Fecha,Concepto,Monto,Tipo\n";
-            
-            for (const accountKey in accounts) {
-                const account = accounts[accountKey];
-                
-                account.transactions.forEach(transaction => {
-                    const tipo = transaction.amount >= 0 ? "Ingreso" : "Egreso";
-                    csvContent += `${account.name},${transaction.date},${transaction.concept},${transaction.amount},${tipo}\n`;
-                });
-            }
-            
-            // Crear un blob y descargar
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
+            // Crear blob y URL
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             
-            link.setAttribute("href", url);
-            link.setAttribute("download", `antologia_cuentas_${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.visibility = 'hidden';
-            
+            // Crear enlace para descargar
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            showNotification("Datos exportados correctamente", "success");
+            // Mostrar instrucciones para email
+            showNotification(
+                "Archivo CSV descargado. Ábrelo en tu app de email y envíalo a tu correo como adjunto.",
+                "info",
+                5000
+            );
         }
 
-        // Exportar datos a CSV
-        function exportToCSV() {
-            exportToExcel(); // Misma función, solo cambia la extensión
+        function downloadBackup() {
+            const csvData = generateCSVData();
+            const filename = `antologia_cuentas_${new Date().toISOString().slice(0,10)}.csv`;
+            
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification("Archivo CSV descargado", "success");
         }
 
-        // Importar datos desde archivo
+        function generateCSVData() {
+            let csvContent = "Cuenta,Fecha,Concepto,Monto,Tipo\n";
+            
+            for (const accountKey in accounts) {
+                const account = accounts[accountKey];
+                account.transactions.forEach(transaction => {
+                    const tipo = transaction.amount >= 0 ? "Ingreso" : "Egreso";
+                    csvContent += `"${account.name}","${transaction.date}","${transaction.concept}",${transaction.amount},"${tipo}"\n`;
+                });
+            }
+            
+            return csvContent;
+        }
+
         function importFromFile() {
             const fileInput = document.getElementById('backupFile');
-            
             if (fileInput.files.length === 0) {
-                showNotification("Por favor selecciona un archivo", "warning");
+                showNotification("Selecciona un archivo primero", "warning");
+                return;
+            }
+            
+            if (!confirm("¿Importar datos? Esto reemplazará los datos actuales.")) {
                 return;
             }
             
             const file = fileInput.files[0];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            
-            // Mostrar confirmación
-            document.getElementById('confirmModalTitle').textContent = 'Importar Datos';
-            document.getElementById('confirmMessage').innerHTML = `
-                <div class="warning-box">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <strong>¡Advertencia!</strong> Esta acción reemplazará todos los datos actuales. 
-                        Asegúrate de haber exportado un respaldo antes de continuar.
-                    </div>
-                </div>
-                <p style="margin-top: 15px;">¿Deseas importar los datos desde el archivo <strong>${file.name}</strong>?</p>
-            `;
-            document.getElementById('confirmActionBtn').setAttribute('data-action', 'importData');
-            document.getElementById('confirmActionBtn').textContent = 'Importar';
-            document.getElementById('confirmActionBtn').className = 'btn btn-primary';
-            
-            document.getElementById('confirmModal').classList.add('active');
-        }
-
-        // Confirmar importación de datos
-        function confirmImportData() {
-            const fileInput = document.getElementById('backupFile');
-            const file = fileInput.files[0];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            
             const reader = new FileReader();
             
             reader.onload = function(e) {
                 try {
                     const content = e.target.result;
-                    let lines = content.split('\n');
-                    
-                    // Si es CSV, procesar directamente
-                    if (fileExtension === 'csv') {
-                        processCSVData(lines);
-                    } else {
-                        // Para otros formatos, intentar procesar como texto plano
-                        processCSVData(lines);
-                    }
-                    
-                    // Limpiar input de archivo
+                    const lines = content.split('\n');
+                    processCSVData(lines);
                     clearFileInput();
-                    
-                    // Cerrar modal
-                    document.getElementById('confirmModal').classList.remove('active');
-                    
                     showNotification("Datos importados correctamente", "success");
                 } catch (error) {
-                    console.error("Error al importar datos:", error);
-                    showNotification("Error al importar datos. Verifica el formato del archivo.", "danger");
+                    showNotification("Error al importar. Verifica el formato.", "danger");
                 }
             };
             
             reader.readAsText(file);
         }
 
-        // Procesar datos CSV
         function processCSVData(lines) {
-            // Reiniciar cuentas
+            // Limpiar transacciones actuales
             for (const accountKey in accounts) {
                 accounts[accountKey].transactions = [];
             }
             
-            // Saltar la primera línea si es el encabezado
             let startIndex = 0;
             if (lines[0].toLowerCase().includes('cuenta')) {
                 startIndex = 1;
             }
             
-            // Procesar cada línea
             for (let i = startIndex; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
                 
-                // Dividir por comas, teniendo en cuenta campos entre comillas
-                const columns = parseCSVLine(line);
-                
+                // Parsear línea CSV simple
+                const columns = line.split(',');
                 if (columns.length >= 4) {
-                    const cuenta = columns[0].trim();
-                    const fecha = columns[1].trim();
-                    const concepto = columns[2].trim();
+                    let cuenta = columns[0].replace(/"/g, '').trim();
+                    const fecha = columns[1].replace(/"/g, '').trim();
+                    const concepto = columns[2].replace(/"/g, '').trim();
                     const monto = parseFloat(columns[3].trim());
-                    const tipo = columns.length >= 5 ? columns[4].trim() : (monto >= 0 ? "Ingreso" : "Egreso");
                     
-                    // Encontrar la cuenta correspondiente
-                    let accountKey = null;
-                    for (const key in accounts) {
-                        if (accounts[key].name.toLowerCase() === cuenta.toLowerCase()) {
-                            accountKey = key;
-                            break;
-                        }
-                    }
+                    // Determinar cuenta
+                    let accountKey = 'efectivo';
+                    if (cuenta.toLowerCase().includes('nequi')) accountKey = 'nequi';
+                    else if (cuenta.toLowerCase().includes('bancolombia')) accountKey = 'bancolombia';
+                    else if (cuenta.toLowerCase().includes('daviplata')) accountKey = 'daviplata';
                     
-                    // Si no se encuentra la cuenta, usar "efectivo" por defecto
-                    if (!accountKey) {
-                        if (cuenta.toLowerCase().includes('nequi')) accountKey = 'nequi';
-                        else if (cuenta.toLowerCase().includes('bancolombia')) accountKey = 'bancolombia';
-                        else if (cuenta.toLowerCase().includes('daviplata')) accountKey = 'daviplata';
-                        else accountKey = 'efectivo';
-                    }
-                    
-                    // Crear transacción
                     const transaction = {
-                        id: Date.now() + i, // ID único
+                        id: Date.now() + i,
                         date: fecha,
                         concept: concepto,
                         amount: monto,
                         type: monto >= 0 ? "ingreso" : "egreso"
                     };
                     
-                    // Añadir a la cuenta
                     accounts[accountKey].transactions.push(transaction);
                 }
             }
             
-            // Guardar en localStorage
             saveData();
-            
-            // Actualizar UI
             updateUI();
             loadTransactions();
         }
 
-        // Función para parsear líneas CSV (maneja campos entre comillas)
-        function parseCSVLine(line) {
-            const result = [];
-            let inQuotes = false;
-            let currentField = '';
-            
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                
-                if (char === '"') {
-                    inQuotes = !inQuotes;
-                } else if (char === ',' && !inQuotes) {
-                    result.push(currentField);
-                    currentField = '';
-                } else {
-                    currentField += char;
-                }
-            }
-            
-            result.push(currentField);
-            return result;
-        }
-
-        // Restaurar datos de ejemplo
-        function restoreSampleData() {
-            document.getElementById('confirmModalTitle').textContent = 'Restaurar Datos de Ejemplo';
-            document.getElementById('confirmMessage').innerHTML = `
-                <div class="warning-box">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>
-                        <strong>¡Advertencia!</strong> Esta acción reemplazará todos los datos actuales por los datos de ejemplo originales.
-                        Asegúrate de haber exportado un respaldo antes de continuar.
-                    </div>
-                </div>
-                <p style="margin-top: 15px;">¿Deseas restaurar los datos de ejemplo del Excel original?</p>
-            `;
-            document.getElementById('confirmActionBtn').setAttribute('data-action', 'restoreSample');
-            document.getElementById('confirmActionBtn').textContent = 'Restaurar';
-            document.getElementById('confirmActionBtn').className = 'btn btn-warning';
-            
-            document.getElementById('confirmModal').classList.add('active');
-        }
-
-        // Confirmar restauración de datos de ejemplo
-        function confirmRestoreSampleData() {
-            // Reiniciar con datos de ejemplo
-            const sampleData = {
-                nequi: {
-                    name: "Nequi",
-                    icon: "fab fa-cc-amazon-pay",
-                    color: "nequi",
-                    balance: 219983,
-                    transactions: [
-                        { id: 1, date: "2025-12-01", concept: "Inicial", amount: 219983, type: "ingreso" },
-                        { id: 2, date: "2025-12-01", concept: "Nevera", amount: -82566, type: "egreso" },
-                        { id: 3, date: "2025-12-01", concept: "Leidy Aguilar", amount: 95000, type: "ingreso" },
-                        { id: 4, date: "2025-12-01", concept: "Cata", amount: 16000, type: "ingreso" },
-                        { id: 5, date: "2025-12-01", concept: "Nata Ramirez", amount: 95000, type: "ingreso" },
-                        { id: 6, date: "2025-12-01", concept: "Angelica Avila", amount: 32000, type: "ingreso" },
-                        { id: 7, date: "2025-12-04", concept: "Medias Caro", amount: 28000, type: "ingreso" }
-                    ]
-                },
-                bancolombia: {
-                    name: "Bancolombia",
-                    icon: "fas fa-university",
-                    color: "bancolombia",
-                    balance: 1657660,
-                    transactions: [
-                        { id: 8, date: "2025-12-01", concept: "Inicial", amount: 1657660, type: "ingreso" },
-                        { id: 9, date: "2025-12-01", concept: "Geraldine", amount: 95000, type: "ingreso" },
-                        { id: 10, date: "2025-12-01", concept: "Ximena", amount: 100000, type: "ingreso" },
-                        { id: 11, date: "2025-12-01", concept: "Jessica", amount: 100000, type: "ingreso" },
-                        { id: 12, date: "2025-12-03", concept: "Jorge papa Malu", amount: 12000, type: "ingreso" },
-                        { id: 13, date: "2025-12-03", concept: "Pilar y Luci", amount: 24000, type: "ingreso" },
-                        { id: 14, date: "2025-12-03", concept: "Felipe fontalvo", amount: 100000, type: "ingreso" },
-                        { id: 15, date: "2025-12-04", concept: "Katerin Dueñas", amount: 100000, type: "ingreso" },
-                        { id: 16, date: "2025-12-09", concept: "Kristell", amount: 203000, type: "ingreso" },
-                        { id: 17, date: "2025-12-09", concept: "Sneyder", amount: 200000, type: "ingreso" }
-                    ]
-                },
-                daviplata: {
-                    name: "Daviplata",
-                    icon: "fas fa-wallet",
-                    color: "daviplata",
-                    balance: 167936,
-                    transactions: [
-                        { id: 18, date: "2025-12-01", concept: "Inicial", amount: 167936, type: "ingreso" },
-                        { id: 19, date: "2025-12-01", concept: "Edison", amount: 12000, type: "ingreso" }
-                    ]
-                },
-                efectivo: {
-                    name: "Efectivo",
-                    icon: "fas fa-money-bill",
-                    color: "efectivo",
-                    balance: 1191134,
-                    transactions: [
-                        { id: 20, date: "2025-12-01", concept: "Inicial", amount: 1166000, type: "ingreso" },
-                        { id: 21, date: "2025-12-01", concept: "Energia", amount: -219540, type: "egreso" },
-                        { id: 22, date: "2025-12-01", concept: "Energia Tatis", amount: -115220, type: "egreso" },
-                        { id: 23, date: "2025-12-01", concept: "Agua", amount: -209590, type: "egreso" },
-                        { id: 24, date: "2025-12-01", concept: "Deuda Carlos", amount: -300900, type: "egreso" },
-                        { id: 25, date: "2025-12-01", concept: "Lina forero", amount: 100000, type: "ingreso" },
-                        { id: 26, date: "2025-12-01", concept: "Claudia Ye", amount: 100000, type: "ingreso" },
-                        { id: 27, date: "2025-12-01", concept: "Kimberly", amount: 100000, type: "ingreso" },
-                        { id: 28, date: "2025-12-01", concept: "Huevos Carlos", amount: -5000, type: "egreso" },
-                        { id: 29, date: "2025-12-01", concept: "Arroz Julian", amount: -50000, type: "egreso" },
-                        { id: 30, date: "2025-12-02", concept: "Joha nov, dic", amount: 190000, type: "ingreso" },
-                        { id: 31, date: "2025-12-02", concept: "Paula Rive", amount: 100000, type: "ingreso" },
-                        { id: 32, date: "2025-12-02", concept: "Pedido", amount: -54000, type: "egreso" },
-                        { id: 33, date: "2025-12-03", concept: "Pedido cafe", amount: -40000, type: "egreso" },
-                        { id: 34, date: "2025-12-03", concept: "Pedido cafeteria", amount: -19700, type: "egreso" },
-                        { id: 35, date: "2025-12-03", concept: "Papel hig", amount: -5000, type: "egreso" },
-                        { id: 36, date: "2025-12-04", concept: "Andrea Barrera", amount: 100000, type: "ingreso" },
-                        { id: 37, date: "2025-12-04", concept: "Gloria", amount: 100000, type: "ingreso" },
-                        { id: 38, date: "2025-12-05", concept: "Mercado sancocho", amount: -110000, type: "egreso" },
-                        { id: 39, date: "2025-12-05", concept: "Carne sancocho", amount: -130000, type: "egreso" },
-                        { id: 40, date: "2025-12-05", concept: "Nancy", amount: 95000, type: "ingreso" },
-                        { id: 41, date: "2025-12-05", concept: "Samuel", amount: 95000, type: "ingreso" },
-                        { id: 42, date: "2025-12-06", concept: "Abono Juan Pablo", amount: 55000, type: "ingreso" },
-                        { id: 43, date: "2025-12-09", concept: "agua chupo", amount: -80000, type: "egreso" }
-                    ]
-                }
-            };
-            
-            accounts = sampleData;
-            
-            // Guardar en localStorage
-            saveData();
-            
-            // Actualizar UI
-            updateUI();
-            loadTransactions();
-            
-            // Cerrar modal
-            document.getElementById('confirmModal').classList.remove('active');
-            
-            showNotification("Datos de ejemplo restaurados correctamente", "success");
-        }
-
-        // Limpiar input de archivo
         function clearFileInput() {
             document.getElementById('backupFile').value = '';
             document.getElementById('fileInfo').style.display = 'none';
             document.getElementById('importBtn').disabled = true;
         }
 
-        // Guardar datos en localStorage
         function saveData() {
             localStorage.setItem('accountsData', JSON.stringify(accounts));
         }
 
-        // Formatear número con separadores de miles
         function formatNumber(number) {
             return Math.abs(number).toLocaleString('es-CO');
         }
 
-        // Formatear fecha
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString('es-CO', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
+            return date.toLocaleDateString('es-CO');
         }
 
-        // Mostrar notificación
-        function showNotification(message, type = "info") {
-            // Crear elemento de notificación
+        function showNotification(message, type = "info", duration = 3000) {
             const notification = document.createElement('div');
+            notification.className = 'notification';
             
             let bgColor = "var(--primary-color)";
             if (type === "success") bgColor = "var(--success-color)";
             if (type === "warning") bgColor = "var(--warning-color)";
             if (type === "danger") bgColor = "var(--danger-color)";
             
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: ${bgColor};
-                color: white;
-                padding: 15px 20px;
-                border-radius: var(--border-radius);
-                box-shadow: var(--box-shadow);
-                z-index: 3000;
-                animation: slideIn 0.3s ease;
-                max-width: 300px;
-            `;
-            
+            notification.style.backgroundColor = bgColor;
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            // Remover después de 3 segundos
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
+                notification.remove();
+            }, duration);
         }
-
-        // Añadir estilos de animación para notificaciones
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
