@@ -124,6 +124,13 @@
             padding: 15px;
             box-shadow: var(--box-shadow);
             border-left: 5px solid var(--primary-color);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .account-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .account-card.nequi {
@@ -416,6 +423,93 @@
             max-width: 300px;
         }
 
+        /* Nuevos estilos para el detalle de cuenta */
+        .account-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .account-detail-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .account-detail-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .account-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .account-detail-transactions {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .account-detail-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        /* Estilos para el modal de cuenta */
+        .account-modal-content {
+            max-width: 600px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         @media (max-width: 600px) {
             .account-cards {
                 grid-template-columns: 1fr 1fr;
@@ -427,6 +521,10 @@
             
             .backup-options {
                 flex-direction: column;
+            }
+            
+            .account-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -452,13 +550,14 @@
         <div class="tabs">
             <div class="tab active" data-tab="resumen"><i class="fas fa-chart-pie"></i> Resumen</div>
             <div class="tab" data-tab="transacciones"><i class="fas fa-list"></i> Transacciones</div>
+            <div class="tab" data-tab="cuentas"><i class="fas fa-wallet"></i> Cuentas</div>
             <div class="tab" data-tab="respaldos"><i class="fas fa-database"></i> Respaldos</div>
         </div>
 
         <!-- Resumen -->
         <div class="tab-content active" id="resumen">
             <div class="account-cards">
-                <div class="account-card nequi">
+                <div class="account-card nequi" data-account="nequi">
                     <div class="account-name">
                         <img src="nequi-icon.png" alt="Nequi" class="account-icon">
                         Nequi
@@ -466,7 +565,7 @@
                     <div class="account-balance positive" id="nequiBalance">$ 0</div>
                 </div>
                 
-                <div class="account-card bancolombia">
+                <div class="account-card bancolombia" data-account="bancolombia">
                     <div class="account-name">
                         <img src="bancolombia-icon.png" alt="Bancolombia" class="account-icon">
                         Bancolombia
@@ -474,7 +573,7 @@
                     <div class="account-balance positive" id="bancolombiaBalance">$ 0</div>
                 </div>
                 
-                <div class="account-card daviplata">
+                <div class="account-card daviplata" data-account="daviplata">
                     <div class="account-name">
                         <img src="daviplata-icon.png" alt="Daviplata" class="account-icon">
                         Daviplata
@@ -482,7 +581,7 @@
                     <div class="account-balance positive" id="daviplataBalance">$ 0</div>
                 </div>
                 
-                <div class="account-card efectivo">
+                <div class="account-card efectivo" data-account="efectivo">
                     <div class="account-name">
                         <img src="efectivo-icon.png" alt="Efectivo" class="account-icon">
                         Efectivo
@@ -495,11 +594,18 @@
         <!-- Transacciones -->
         <div class="tab-content" id="transacciones">
             <div class="transactions-list" id="transactionsList">
-                <div style="text-align: center; padding: 40px 20px; color: #666;">
-                    <i class="fas fa-exchange-alt" style="font-size: 3rem; margin-bottom: 15px; color: #ccc;"></i>
+                <div class="empty-state">
+                    <i class="fas fa-exchange-alt"></i>
                     <h3>No hay transacciones</h3>
                     <p>Añade tu primera transacción usando el botón +</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Cuentas -->
+        <div class="tab-content" id="cuentas">
+            <div class="account-cards" id="accountsList">
+                <!-- Las cuentas se cargarán dinámicamente aquí -->
             </div>
         </div>
 
@@ -618,6 +724,47 @@
         </div>
     </div>
 
+    <!-- Modal para detalle de cuenta -->
+    <div class="modal" id="accountDetailModal">
+        <div class="modal-content account-modal-content">
+            <div class="account-detail-header">
+                <img src="" alt="" class="account-detail-icon" id="detailAccountIcon">
+                <div class="account-detail-name" id="detailAccountName">Cuenta</div>
+                <button class="close-btn close-account-detail"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="account-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Saldo Actual</div>
+                    <div class="stat-value" id="detailAccountBalance">$ 0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Ingresos</div>
+                    <div class="stat-value positive" id="detailAccountIncome">$ 0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Egresos</div>
+                    <div class="stat-value negative" id="detailAccountExpense">$ 0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">N° Transacciones</div>
+                    <div class="stat-value" id="detailTransactionCount">0</div>
+                </div>
+            </div>
+            
+            <div class="account-detail-transactions">
+                <div class="account-detail-title">Últimas Transacciones</div>
+                <div id="detailAccountTransactions">
+                    <div class="empty-state">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>No hay transacciones</h3>
+                        <p>Esta cuenta aún no tiene movimientos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Datos iniciales vacíos
         let accounts = {
@@ -664,6 +811,7 @@
             document.getElementById('date').valueAsDate = new Date();
             updateUI();
             loadTransactions();
+            loadAccountsTab();
             setupEventListeners();
             setupBackupFileListener();
             
@@ -673,8 +821,6 @@
 
         // Configurar iconos
         function setupIcons() {
-            // Los iconos ya están en el HTML como imágenes
-            // Esta función manejaría errores de carga si fuera necesario
             const icons = ['nequi-icon.png', 'bancolombia-icon.png', 'daviplata-icon.png', 'efectivo-icon.png'];
             icons.forEach(icon => {
                 const img = new Image();
@@ -693,17 +839,28 @@
                     this.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                     document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+                    
+                    // Si es la pestaña de cuentas, cargarlas
+                    if (this.getAttribute('data-tab') === 'cuentas') {
+                        loadAccountsTab();
+                    }
                 });
             });
             
             // Botón para añadir transacción
             document.getElementById('addTransactionBtn').addEventListener('click', openTransactionModal);
             
-            // Cerrar modal
+            // Cerrar modales
             document.querySelectorAll('.close-modal').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.getElementById('transactionModal').classList.remove('active');
                     resetTransactionForm();
+                });
+            });
+            
+            document.querySelectorAll('.close-account-detail').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('accountDetailModal').classList.remove('active');
                 });
             });
             
@@ -719,6 +876,14 @@
             
             // Botón de eliminar
             document.getElementById('deleteTransactionBtn').addEventListener('click', deleteTransaction);
+            
+            // Hacer clic en las tarjetas de cuenta del resumen
+            document.querySelectorAll('.account-card[data-account]').forEach(card => {
+                card.addEventListener('click', function() {
+                    const accountKey = this.getAttribute('data-account');
+                    openAccountDetail(accountKey);
+                });
+            });
         }
 
         function setupBackupFileListener() {
@@ -806,6 +971,140 @@
             }
         }
 
+        // Cargar la pestaña de cuentas
+        function loadAccountsTab() {
+            const accountsList = document.getElementById('accountsList');
+            accountsList.innerHTML = '';
+            
+            for (const accountKey in accounts) {
+                const account = accounts[accountKey];
+                const balance = account.balance;
+                const balanceClass = balance >= 0 ? 'positive' : 'negative';
+                
+                // Calcular estadísticas
+                let totalIncome = 0;
+                let totalExpense = 0;
+                let transactionCount = account.transactions.length;
+                
+                account.transactions.forEach(transaction => {
+                    if (transaction.amount > 0) {
+                        totalIncome += transaction.amount;
+                    } else {
+                        totalExpense += Math.abs(transaction.amount);
+                    }
+                });
+                
+                const accountCard = document.createElement('div');
+                accountCard.className = `account-card ${account.color}`;
+                accountCard.setAttribute('data-account', accountKey);
+                accountCard.innerHTML = `
+                    <div class="account-name">
+                        <img src="${account.icon}" alt="${account.name}" class="account-icon">
+                        ${account.name}
+                    </div>
+                    <div class="account-balance ${balanceClass}">$ ${formatNumber(balance)}</div>
+                    <div style="margin-top: 10px; font-size: 0.85rem; color: #666;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Ingresos:</span>
+                            <span class="positive">$ ${formatNumber(totalIncome)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Egresos:</span>
+                            <span class="negative">$ ${formatNumber(totalExpense)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Transacciones:</span>
+                            <span>${transactionCount}</span>
+                        </div>
+                    </div>
+                `;
+                
+                accountCard.addEventListener('click', function() {
+                    openAccountDetail(accountKey);
+                });
+                
+                accountsList.appendChild(accountCard);
+            }
+        }
+
+        // Mostrar detalle de cuenta
+        function openAccountDetail(accountKey) {
+            const account = accounts[accountKey];
+            
+            // Configurar encabezado
+            document.getElementById('detailAccountIcon').src = account.icon;
+            document.getElementById('detailAccountIcon').alt = account.name;
+            document.getElementById('detailAccountName').textContent = account.name;
+            
+            // Calcular estadísticas
+            let totalIncome = 0;
+            let totalExpense = 0;
+            let balance = 0;
+            
+            account.transactions.forEach(transaction => {
+                balance += transaction.amount;
+                if (transaction.amount > 0) {
+                    totalIncome += transaction.amount;
+                } else {
+                    totalExpense += Math.abs(transaction.amount);
+                }
+            });
+            
+            // Actualizar estadísticas
+            document.getElementById('detailAccountBalance').textContent = `$ ${formatNumber(balance)}`;
+            document.getElementById('detailAccountBalance').className = `stat-value ${balance >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('detailAccountIncome').textContent = `$ ${formatNumber(totalIncome)}`;
+            document.getElementById('detailAccountExpense').textContent = `$ ${formatNumber(totalExpense)}`;
+            document.getElementById('detailTransactionCount').textContent = account.transactions.length;
+            
+            // Mostrar transacciones
+            const detailTransactions = document.getElementById('detailAccountTransactions');
+            
+            if (account.transactions.length > 0) {
+                const sortedTransactions = [...account.transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                detailTransactions.innerHTML = '';
+                sortedTransactions.slice(0, 10).forEach(transaction => { // Mostrar solo las últimas 10
+                    const amountClass = transaction.amount >= 0 ? 'positive' : 'negative';
+                    const amountSign = transaction.amount >= 0 ? '+' : '';
+                    const formattedDate = formatDate(transaction.date);
+                    
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
+                    transactionElement.innerHTML = `
+                        <div class="transaction-info">
+                            <div class="transaction-concept">${transaction.concept}</div>
+                            <div class="transaction-date">${formattedDate}</div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">
+                            ${amountSign}$ ${formatNumber(transaction.amount)}
+                        </div>
+                    `;
+                    detailTransactions.appendChild(transactionElement);
+                });
+                
+                if (account.transactions.length > 10) {
+                    const moreElement = document.createElement('div');
+                    moreElement.style.textAlign = 'center';
+                    moreElement.style.padding = '10px';
+                    moreElement.style.color = '#666';
+                    moreElement.textContent = `...y ${account.transactions.length - 10} transacciones más`;
+                    detailTransactions.appendChild(moreElement);
+                }
+            } else {
+                detailTransactions.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>No hay transacciones</h3>
+                        <p>Esta cuenta aún no tiene movimientos</p>
+                    </div>
+                `;
+            }
+            
+            // Mostrar modal
+            document.getElementById('accountDetailModal').classList.add('active');
+        }
+
         function openTransactionModal() {
             isEditing = false;
             currentEditId = null;
@@ -868,6 +1167,7 @@
             saveData();
             updateUI();
             loadTransactions();
+            loadAccountsTab(); // Actualizar pestaña de cuentas
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
             showNotification(`Transacción añadida a ${accounts[account].name}`, "success");
@@ -909,6 +1209,7 @@
             saveData();
             updateUI();
             loadTransactions();
+            loadAccountsTab(); // Actualizar pestaña de cuentas
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
             showNotification(`Transacción actualizada`, "success");
@@ -929,6 +1230,7 @@
                 saveData();
                 updateUI();
                 loadTransactions();
+                loadAccountsTab(); // Actualizar pestaña de cuentas
                 showNotification(`Transacción eliminada`, "success");
             }
         }
@@ -1027,6 +1329,7 @@
                     const lines = content.split('\n');
                     processCSVData(lines);
                     clearFileInput();
+                    loadAccountsTab(); // Actualizar pestaña de cuentas
                     showNotification("Datos importados correctamente", "success");
                 } catch (error) {
                     showNotification("Error al importar. Verifica el formato.", "danger");
