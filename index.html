@@ -12,6 +12,7 @@
             --success-color: #28a745;
             --danger-color: #dc3545;
             --warning-color: #ffc107;
+            --info-color: #17a2b8;
             --border-radius: 10px;
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -86,10 +87,12 @@
             overflow: hidden;
             margin-bottom: 20px;
             box-shadow: var(--box-shadow);
+            flex-wrap: wrap;
         }
 
         .tab {
             flex: 1;
+            min-width: 120px;
             text-align: center;
             padding: 15px 10px;
             font-weight: 600;
@@ -177,6 +180,10 @@
             color: var(--danger-color);
         }
 
+        .info {
+            color: var(--info-color);
+        }
+
         .transactions-list {
             background-color: white;
             border-radius: var(--border-radius);
@@ -260,6 +267,12 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             border: none;
+            z-index: 1000;
+        }
+
+        .floating-button.secondary {
+            right: 90px;
+            background-color: var(--info-color);
         }
 
         .modal {
@@ -359,6 +372,11 @@
 
         .btn-success {
             background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
             color: white;
         }
 
@@ -603,6 +621,131 @@
             font-weight: 700;
         }
 
+        /* Estilos para gastos fijos */
+        .fixed-expense-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 15px;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .fixed-expense-card.paid {
+            opacity: 0.7;
+            border-left-color: var(--success-color);
+        }
+
+        .fixed-expense-card.overdue {
+            border-left-color: var(--danger-color);
+            background-color: rgba(220, 53, 69, 0.05);
+        }
+
+        .fixed-expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .fixed-expense-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .fixed-expense-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--danger-color);
+        }
+
+        .fixed-expense-details {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .fixed-expense-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #856404;
+        }
+
+        .status-paid {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #155724;
+        }
+
+        .fixed-expense-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .reminder-box {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            color: #004085;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reminder-info {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: #333;
+        }
+
+        .badge-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+
         @media (max-width: 600px) {
             .account-cards {
                 grid-template-columns: 1fr 1fr;
@@ -628,6 +771,19 @@
             .month-summary {
                 grid-template-columns: 1fr;
             }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: 100%;
+            }
+            
+            .floating-button.secondary {
+                right: 20px;
+                bottom: 90px;
+            }
         }
     </style>
 </head>
@@ -652,6 +808,7 @@
         <div class="tabs">
             <div class="tab active" data-tab="resumen"><i class="fas fa-chart-pie"></i> Resumen</div>
             <div class="tab" data-tab="transacciones"><i class="fas fa-list"></i> Transacciones</div>
+            <div class="tab" data-tab="gastos-fijos"><i class="fas fa-calendar-alt"></i> Gastos Fijos</div>
             <div class="tab" data-tab="cuentas"><i class="fas fa-wallet"></i> Cuentas</div>
             <div class="tab" data-tab="respaldos"><i class="fas fa-database"></i> Respaldos</div>
         </div>
@@ -724,12 +881,30 @@
                 </div>
             </div>
 
+            <!-- Recordatorios de gastos fijos -->
+            <div id="fixedExpenseReminders" style="display: none;"></div>
+
             <!-- Lista de transacciones -->
             <div class="transactions-list" id="transactionsList">
                 <div class="empty-state">
                     <i class="fas fa-exchange-alt"></i>
                     <h3>No hay transacciones</h3>
                     <p>Añade tu primera transacción usando el botón +</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gastos Fijos -->
+        <div class="tab-content" id="gastos-fijos">
+            <!-- Recordatorios pendientes -->
+            <div id="pendingFixedExpenses"></div>
+            
+            <!-- Lista de gastos fijos -->
+            <div id="fixedExpensesList">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>No hay gastos fijos configurados</h3>
+                    <p>Añade tu primer gasto fijo usando el botón de calendario</p>
                 </div>
             </div>
         </div>
@@ -794,8 +969,12 @@
         </div>
     </div>
 
-    <!-- Botón flotante -->
-    <div class="floating-button" id="addTransactionBtn">
+    <!-- Botones flotantes -->
+    <div class="floating-button secondary" id="addFixedExpenseBtn" title="Añadir gasto fijo">
+        <i class="fas fa-calendar-plus"></i>
+    </div>
+    
+    <div class="floating-button" id="addTransactionBtn" title="Añadir transacción">
         <i class="fas fa-plus"></i>
     </div>
 
@@ -810,6 +989,7 @@
                 <form id="transactionForm">
                     <input type="hidden" id="transactionId">
                     <input type="hidden" id="originalAccount">
+                    <input type="hidden" id="isFixedExpensePayment">
                     
                     <div class="form-group">
                         <label class="form-label" for="account">Cuenta</label>
@@ -846,10 +1026,115 @@
                         <input type="date" class="form-input" id="date" required>
                     </div>
                     
+                    <div class="form-group" id="fixedExpensePaymentGroup" style="display: none;">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="markAsFixedExpensePayment">
+                            <label class="form-check-label" for="markAsFixedExpensePayment">
+                                Marcar como pago de gasto fijo
+                            </label>
+                        </div>
+                        <select class="form-select" id="fixedExpenseForPayment" style="margin-top: 10px; display: none;">
+                            <option value="">Seleccionar gasto fijo</option>
+                        </select>
+                    </div>
+                    
                     <div class="form-buttons">
                         <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary" id="submitTransactionBtn">Guardar</button>
                         <button type="button" class="btn btn-danger" id="deleteTransactionBtn" style="display: none;">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para gasto fijo -->
+    <div class="modal" id="fixedExpenseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="fixedExpenseModalTitle">Nuevo Gasto Fijo</h2>
+                <i class="fas fa-times close-fixed-expense-modal" style="cursor: pointer;"></i>
+            </div>
+            <div class="modal-body">
+                <form id="fixedExpenseForm">
+                    <input type="hidden" id="fixedExpenseId">
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseName">Nombre del gasto</label>
+                        <input type="text" class="form-input" id="fixedExpenseName" placeholder="Ej. Servicio de energía" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseAmount">Monto</label>
+                        <input type="number" class="form-input" id="fixedExpenseAmount" placeholder="Ej. 500000" required min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseDay">Día del mes para recordatorio</label>
+                        <select class="form-select" id="fixedExpenseDay" required>
+                            <option value="">Selecciona un día</option>
+                            <option value="1">1 - Primer día del mes</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseAccount">Cuenta sugerida para pago</label>
+                        <select class="form-select" id="fixedExpenseAccount">
+                            <option value="">No especificar</option>
+                            <option value="nequi">Nequi</option>
+                            <option value="bancolombia">Bancolombia</option>
+                            <option value="daviplata">Daviplata</option>
+                            <option value="efectivo">Efectivo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseCategory">Categoría</label>
+                        <input type="text" class="form-input" id="fixedExpenseCategory" placeholder="Ej. Servicios, Alquiler, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="fixedExpenseActive">Estado</label>
+                        <select class="form-select" id="fixedExpenseActive" required>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-secondary close-fixed-expense-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="submitFixedExpenseBtn">Guardar</button>
+                        <button type="button" class="btn btn-danger" id="deleteFixedExpenseBtn" style="display: none;">Eliminar</button>
                     </div>
                 </form>
             </div>
@@ -898,7 +1183,7 @@
     </div>
 
     <script>
-        // Datos iniciales vacíos
+        // Datos iniciales
         let accounts = {
             nequi: {
                 name: "Nequi",
@@ -930,8 +1215,16 @@
             }
         };
 
+        // Gastos fijos
+        let fixedExpenses = [];
+        
+        // Variables para transacciones
         let isEditing = false;
         let currentEditId = null;
+        
+        // Variables para gastos fijos
+        let isEditingFixedExpense = false;
+        let currentEditFixedExpenseId = null;
         
         // Variables para filtro de mes
         let currentMonth = new Date().getMonth();
@@ -940,22 +1233,46 @@
 
         // Cargar datos al iniciar
         document.addEventListener('DOMContentLoaded', function() {
+            // Cargar cuentas
             const savedAccounts = localStorage.getItem('accountsData');
             if (savedAccounts) {
                 accounts = JSON.parse(savedAccounts);
             }
             
-            document.getElementById('date').valueAsDate = new Date();
+            // Cargar gastos fijos
+            const savedFixedExpenses = localStorage.getItem('fixedExpensesData');
+            if (savedFixedExpenses) {
+                fixedExpenses = JSON.parse(savedFixedExpenses);
+            }
+            
+            // Configurar fecha por defecto
+            setTodayDate();
+            
+            // Actualizar interfaz
             updateUI();
             loadTransactions();
             loadAccountsTab();
+            loadFixedExpenses();
             setupEventListeners();
             setupBackupFileListener();
             updateMonthDisplay();
             
             // Configurar iconos
             setupIcons();
+            
+            // Verificar recordatorios
+            checkReminders();
         });
+
+        // Configurar fecha actual en formato correcto (sin problemas de zona horaria)
+        function setTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+            document.getElementById('date').value = todayStr;
+        }
 
         // Configurar iconos
         function setupIcons() {
@@ -978,14 +1295,13 @@
                     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                     document.getElementById(this.getAttribute('data-tab')).classList.add('active');
                     
-                    // Si es la pestaña de transacciones, actualizar
+                    // Actualizar contenido según la pestaña
                     if (this.getAttribute('data-tab') === 'transacciones') {
                         loadTransactions();
                         updateMonthDisplay();
-                    }
-                    
-                    // Si es la pestaña de cuentas, cargarlas
-                    if (this.getAttribute('data-tab') === 'cuentas') {
+                    } else if (this.getAttribute('data-tab') === 'gastos-fijos') {
+                        loadFixedExpenses();
+                    } else if (this.getAttribute('data-tab') === 'cuentas') {
                         loadAccountsTab();
                     }
                 });
@@ -993,6 +1309,9 @@
             
             // Botón para añadir transacción
             document.getElementById('addTransactionBtn').addEventListener('click', openTransactionModal);
+            
+            // Botón para añadir gasto fijo
+            document.getElementById('addFixedExpenseBtn').addEventListener('click', openFixedExpenseModal);
             
             // Cerrar modales
             document.querySelectorAll('.close-modal').forEach(btn => {
@@ -1002,13 +1321,20 @@
                 });
             });
             
+            document.querySelectorAll('.close-fixed-expense-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('fixedExpenseModal').classList.remove('active');
+                    resetFixedExpenseForm();
+                });
+            });
+            
             document.querySelectorAll('.close-account-detail').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.getElementById('accountDetailModal').classList.remove('active');
                 });
             });
             
-            // Formulario
+            // Formularios
             document.getElementById('transactionForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 if (isEditing) {
@@ -1018,8 +1344,18 @@
                 }
             });
             
-            // Botón de eliminar
+            document.getElementById('fixedExpenseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (isEditingFixedExpense) {
+                    updateFixedExpense();
+                } else {
+                    addFixedExpense();
+                }
+            });
+            
+            // Botones de eliminar
             document.getElementById('deleteTransactionBtn').addEventListener('click', deleteTransaction);
+            document.getElementById('deleteFixedExpenseBtn').addEventListener('click', deleteFixedExpense);
             
             // Hacer clic en las tarjetas de cuenta del resumen
             document.querySelectorAll('.account-card[data-account]').forEach(card => {
@@ -1070,6 +1406,21 @@
                     loadTransactions();
                 });
             });
+            
+            // Detectar cambios en el tipo de transacción para mostrar opción de gasto fijo
+            document.getElementById('type').addEventListener('change', function() {
+                if (this.value === 'egreso') {
+                    document.getElementById('fixedExpensePaymentGroup').style.display = 'block';
+                    loadFixedExpensesForPayment();
+                } else {
+                    document.getElementById('fixedExpensePaymentGroup').style.display = 'none';
+                }
+            });
+            
+            // Detectar cambios en el checkbox de gasto fijo
+            document.getElementById('markAsFixedExpensePayment').addEventListener('change', function() {
+                document.getElementById('fixedExpenseForPayment').style.display = this.checked ? 'block' : 'none';
+            });
         }
 
         function updateMonthDisplay() {
@@ -1118,16 +1469,104 @@
             document.getElementById('totalGeneral').textContent = `$ ${formatNumber(totalGeneral)}`;
         }
 
+        // Cargar gastos fijos en el selector de pagos
+        function loadFixedExpensesForPayment() {
+            const select = document.getElementById('fixedExpenseForPayment');
+            select.innerHTML = '<option value="">Seleccionar gasto fijo</option>';
+            
+            const today = new Date();
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            fixedExpenses.forEach(expense => {
+                if (expense.active) {
+                    // Verificar si ya fue pagado este mes
+                    const lastPaidMonthYear = expense.lastPaid ? 
+                        `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+                    
+                    if (lastPaidMonthYear !== currentMonthYear) {
+                        const option = document.createElement('option');
+                        option.value = expense.id;
+                        option.textContent = `${expense.name} - $${formatNumber(expense.amount)}`;
+                        select.appendChild(option);
+                    }
+                }
+            });
+        }
+
         function loadTransactions() {
             const transactionsList = document.getElementById('transactionsList');
+            const remindersContainer = document.getElementById('fixedExpenseReminders');
+            
             let allTransactions = [];
             let monthIncome = 0;
             let monthExpense = 0;
             
+            // Limpiar recordatorios anteriores
+            remindersContainer.innerHTML = '';
+            remindersContainer.style.display = 'none';
+            
+            // Verificar si hay recordatorios para hoy
+            const today = new Date();
+            const currentDay = today.getDate();
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            let hasReminders = false;
+            let remindersHTML = '';
+            
+            fixedExpenses.forEach(expense => {
+                if (expense.active) {
+                    // Verificar si es día de recordatorio
+                    const reminderDay = parseInt(expense.day);
+                    
+                    // Verificar si ya fue pagado este mes
+                    const lastPaidMonthYear = expense.lastPaid ? 
+                        `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+                    
+                    // Si el gasto no ha sido pagado este mes y hoy es el día de recordatorio o después
+                    if (lastPaidMonthYear !== currentMonthYear && currentDay >= reminderDay) {
+                        hasReminders = true;
+                        
+                        let statusClass = 'pending';
+                        let statusText = 'Pendiente';
+                        let daysOverdue = currentDay - reminderDay;
+                        
+                        if (daysOverdue > 0) {
+                            statusClass = 'overdue';
+                            statusText = `Vencido hace ${daysOverdue} día${daysOverdue > 1 ? 's' : ''}`;
+                        }
+                        
+                        remindersHTML += `
+                            <div class="reminder-box">
+                                <div class="reminder-info">
+                                    <div class="reminder-title">${expense.name}</div>
+                                    <div>Vence el día ${expense.day} - $${formatNumber(expense.amount)}</div>
+                                    <span class="fixed-expense-status status-${statusClass}">${statusText}</span>
+                                </div>
+                                <div class="reminder-actions">
+                                    <button class="btn btn-info btn-sm" onclick="payFixedExpense(${expense.id})">
+                                        <i class="fas fa-money-bill-wave"></i> Pagar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+            
+            if (hasReminders) {
+                remindersContainer.innerHTML = `
+                    <div style="margin-bottom: 15px;">
+                        <h3><i class="fas fa-bell"></i> Recordatorios de Gastos Fijos</h3>
+                    </div>
+                    ${remindersHTML}
+                `;
+                remindersContainer.style.display = 'block';
+            }
+            
             for (const accountKey in accounts) {
                 const account = accounts[accountKey];
                 account.transactions.forEach(transaction => {
-                    const transactionDate = new Date(transaction.date);
+                    const transactionDate = parseDateString(transaction.date);
                     const transactionMonth = transactionDate.getMonth();
                     const transactionYear = transactionDate.getFullYear();
                     
@@ -1163,7 +1602,7 @@
                 monthSummary.style.display = 'none';
             }
             
-            allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            allTransactions.sort((a, b) => parseDateString(b.date) - parseDateString(a.date));
             
             if (allTransactions.length > 0) {
                 transactionsList.innerHTML = '';
@@ -1172,11 +1611,23 @@
                     const amountSign = transaction.amount >= 0 ? '+' : '';
                     const formattedDate = formatDate(transaction.date);
                     
+                    // Verificar si esta transacción es pago de un gasto fijo
+                    let fixedExpenseBadge = '';
+                    if (transaction.fixedExpenseId) {
+                        const expense = fixedExpenses.find(e => e.id === transaction.fixedExpenseId);
+                        if (expense) {
+                            fixedExpenseBadge = `<span class="badge badge-info">${expense.name}</span>`;
+                        }
+                    }
+                    
                     const transactionElement = document.createElement('div');
                     transactionElement.className = 'transaction-item';
                     transactionElement.innerHTML = `
                         <div class="transaction-info">
-                            <div class="transaction-concept">${transaction.concept}</div>
+                            <div class="transaction-concept">
+                                ${transaction.concept}
+                                ${fixedExpenseBadge}
+                            </div>
                             <div class="transaction-date">${formattedDate} • ${transaction.accountName}</div>
                         </div>
                         <div class="transaction-amount ${amountClass}">
@@ -1260,6 +1711,175 @@
             }
         }
 
+        // Cargar gastos fijos
+        function loadFixedExpenses() {
+            const expensesList = document.getElementById('fixedExpensesList');
+            const pendingContainer = document.getElementById('pendingFixedExpenses');
+            
+            // Limpiar contenedores
+            expensesList.innerHTML = '';
+            pendingContainer.innerHTML = '';
+            
+            // Filtrar gastos activos pendientes
+            const today = new Date();
+            const currentDay = today.getDate();
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            let pendingExpenses = [];
+            let paidExpenses = [];
+            let inactiveExpenses = [];
+            
+            fixedExpenses.forEach(expense => {
+                // Verificar si ya fue pagado este mes
+                const lastPaidMonthYear = expense.lastPaid ? 
+                    `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+                
+                if (!expense.active) {
+                    inactiveExpenses.push(expense);
+                } else if (lastPaidMonthYear === currentMonthYear) {
+                    paidExpenses.push(expense);
+                } else {
+                    pendingExpenses.push(expense);
+                }
+            });
+            
+            // Mostrar gastos pendientes primero
+            if (pendingExpenses.length > 0) {
+                pendingExpenses.forEach(expense => {
+                    const expenseElement = createFixedExpenseCard(expense, 'pending');
+                    expensesList.appendChild(expenseElement);
+                });
+            }
+            
+            // Mostrar gastos pagados
+            if (paidExpenses.length > 0) {
+                paidExpenses.forEach(expense => {
+                    const expenseElement = createFixedExpenseCard(expense, 'paid');
+                    expensesList.appendChild(expenseElement);
+                });
+            }
+            
+            // Mostrar gastos inactivos
+            if (inactiveExpenses.length > 0) {
+                inactiveExpenses.forEach(expense => {
+                    const expenseElement = createFixedExpenseCard(expense, 'inactive');
+                    expensesList.appendChild(expenseElement);
+                });
+            }
+            
+            // Mostrar estado vacío si no hay gastos
+            if (fixedExpenses.length === 0) {
+                expensesList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>No hay gastos fijos configurados</h3>
+                        <p>Añade tu primer gasto fijo usando el botón de calendario</p>
+                </div>
+                `;
+            }
+            
+            // Mostrar resumen de pendientes
+            if (pendingExpenses.length > 0) {
+                let totalPending = 0;
+                pendingExpenses.forEach(expense => {
+                    totalPending += expense.amount;
+                });
+                
+                pendingContainer.innerHTML = `
+                    <div class="warning-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong><i class="fas fa-exclamation-triangle"></i> Tienes ${pendingExpenses.length} gasto(s) fijo(s) pendiente(s)</strong>
+                                <div style="margin-top: 5px;">Total pendiente: <span class="negative">$ ${formatNumber(totalPending)}</span></div>
+                            </div>
+                            <button class="btn btn-primary" onclick="payAllPendingExpenses()">
+                                <i class="fas fa-money-bill-wave"></i> Pagar Todos
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Crear tarjeta de gasto fijo
+        function createFixedExpenseCard(expense, status) {
+            const today = new Date();
+            const currentDay = today.getDate();
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            const lastPaidMonthYear = expense.lastPaid ? 
+                `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+            
+            let statusClass = '';
+            let statusText = '';
+            let cardClass = 'fixed-expense-card';
+            let daysRemaining = 0;
+            
+            if (status === 'paid') {
+                statusClass = 'status-paid';
+                statusText = `Pagado el ${formatDate(expense.lastPaid)}`;
+                cardClass += ' paid';
+            } else if (status === 'inactive') {
+                statusClass = 'status-pending';
+                statusText = 'Inactivo';
+                cardClass += ' paid';
+            } else {
+                // Calcular días restantes/hasta vencimiento
+                const reminderDay = parseInt(expense.day);
+                daysRemaining = reminderDay - currentDay;
+                
+                if (daysRemaining < 0) {
+                    statusClass = 'status-pending';
+                    statusText = `Vencido hace ${Math.abs(daysRemaining)} día${Math.abs(daysRemaining) > 1 ? 's' : ''}`;
+                    cardClass += ' overdue';
+                } else if (daysRemaining === 0) {
+                    statusClass = 'status-pending';
+                    statusText = 'Vence hoy';
+                } else {
+                    statusClass = 'status-pending';
+                    statusText = `Vence en ${daysRemaining} día${daysRemaining > 1 ? 's' : ''}`;
+                }
+            }
+            
+            // Información de cuenta sugerida
+            let accountInfo = '';
+            if (expense.account && accounts[expense.account]) {
+                accountInfo = `<div><i class="fas fa-wallet"></i> ${accounts[expense.account].name}</div>`;
+            }
+            
+            const card = document.createElement('div');
+            card.className = cardClass;
+            card.innerHTML = `
+                <div class="fixed-expense-header">
+                    <div class="fixed-expense-title">${expense.name}</div>
+                    <div class="fixed-expense-amount">$ ${formatNumber(expense.amount)}</div>
+                </div>
+                <div class="fixed-expense-details">
+                    <div>
+                        <div><i class="fas fa-calendar-day"></i> Recordatorio día ${expense.day}</div>
+                        ${accountInfo}
+                        ${expense.category ? `<div><i class="fas fa-tag"></i> ${expense.category}</div>` : ''}
+                    </div>
+                    <div>
+                        <span class="fixed-expense-status ${statusClass}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="fixed-expense-actions">
+                    <button class="btn btn-primary btn-sm" onclick="editFixedExpense(${expense.id})">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn ${status === 'paid' || status === 'inactive' ? 'btn-secondary' : 'btn-success'} btn-sm" onclick="payFixedExpense(${expense.id})" ${status === 'paid' || status === 'inactive' ? 'disabled' : ''}>
+                        <i class="fas fa-check-circle"></i> ${status === 'paid' ? 'Pagado' : 'Marcar como Pagado'}
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteFixedExpenseConfirmation(${expense.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
         // Mostrar detalle de cuenta
         function openAccountDetail(accountKey) {
             const account = accounts[accountKey];
@@ -1294,7 +1914,7 @@
             const detailTransactions = document.getElementById('detailAccountTransactions');
             
             if (account.transactions.length > 0) {
-                const sortedTransactions = [...account.transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+                const sortedTransactions = [...account.transactions].sort((a, b) => parseDateString(b.date) - parseDateString(a.date));
                 
                 detailTransactions.innerHTML = '';
                 sortedTransactions.slice(0, 10).forEach(transaction => { // Mostrar solo las últimas 10
@@ -1345,10 +1965,26 @@
             document.getElementById('submitTransactionBtn').textContent = 'Guardar';
             document.getElementById('deleteTransactionBtn').style.display = 'none';
             document.getElementById('transactionForm').reset();
-            document.getElementById('date').valueAsDate = new Date();
+            setTodayDate();
             document.getElementById('transactionId').value = '';
             document.getElementById('originalAccount').value = '';
+            document.getElementById('isFixedExpensePayment').value = 'false';
+            document.getElementById('fixedExpensePaymentGroup').style.display = 'none';
+            document.getElementById('markAsFixedExpensePayment').checked = false;
+            document.getElementById('fixedExpenseForPayment').style.display = 'none';
             document.getElementById('transactionModal').classList.add('active');
+        }
+
+        function openFixedExpenseModal() {
+            isEditingFixedExpense = false;
+            currentEditFixedExpenseId = null;
+            document.getElementById('fixedExpenseModalTitle').textContent = 'Nuevo Gasto Fijo';
+            document.getElementById('submitFixedExpenseBtn').textContent = 'Guardar';
+            document.getElementById('deleteFixedExpenseBtn').style.display = 'none';
+            document.getElementById('fixedExpenseForm').reset();
+            document.getElementById('fixedExpenseId').value = '';
+            document.getElementById('fixedExpenseActive').value = 'true';
+            document.getElementById('fixedExpenseModal').classList.add('active');
         }
 
         function editTransaction(accountKey, transactionId) {
@@ -1370,9 +2006,48 @@
             document.getElementById('type').value = transaction.type;
             document.getElementById('amount').value = Math.abs(transaction.amount);
             document.getElementById('concept').value = transaction.concept;
+            
+            // CORRECCIÓN: Usar la fecha directamente sin conversión problemática
             document.getElementById('date').value = transaction.date;
             
+            // Verificar si es pago de gasto fijo
+            if (transaction.fixedExpenseId) {
+                document.getElementById('isFixedExpensePayment').value = 'true';
+                document.getElementById('fixedExpensePaymentGroup').style.display = 'block';
+                document.getElementById('markAsFixedExpensePayment').checked = true;
+                document.getElementById('fixedExpenseForPayment').style.display = 'block';
+                
+                // Cargar gastos fijos en el selector
+                loadFixedExpensesForPayment();
+                document.getElementById('fixedExpenseForPayment').value = transaction.fixedExpenseId;
+            } else if (transaction.type === 'egreso') {
+                document.getElementById('fixedExpensePaymentGroup').style.display = 'block';
+            }
+            
             document.getElementById('transactionModal').classList.add('active');
+        }
+
+        function editFixedExpense(expenseId) {
+            const expense = fixedExpenses.find(e => e.id === expenseId);
+            
+            if (!expense) return;
+            
+            isEditingFixedExpense = true;
+            currentEditFixedExpenseId = expenseId;
+            
+            document.getElementById('fixedExpenseModalTitle').textContent = 'Editar Gasto Fijo';
+            document.getElementById('submitFixedExpenseBtn').textContent = 'Actualizar';
+            document.getElementById('deleteFixedExpenseBtn').style.display = 'block';
+            
+            document.getElementById('fixedExpenseId').value = expenseId;
+            document.getElementById('fixedExpenseName').value = expense.name;
+            document.getElementById('fixedExpenseAmount').value = expense.amount;
+            document.getElementById('fixedExpenseDay').value = expense.day;
+            document.getElementById('fixedExpenseAccount').value = expense.account || '';
+            document.getElementById('fixedExpenseCategory').value = expense.category || '';
+            document.getElementById('fixedExpenseActive').value = expense.active.toString();
+            
+            document.getElementById('fixedExpenseModal').classList.add('active');
         }
 
         function addTransaction() {
@@ -1381,6 +2056,8 @@
             const amount = parseFloat(document.getElementById('amount').value);
             const concept = document.getElementById('concept').value;
             const date = document.getElementById('date').value;
+            const isFixedExpensePayment = document.getElementById('markAsFixedExpensePayment').checked;
+            const fixedExpenseId = isFixedExpensePayment ? parseInt(document.getElementById('fixedExpenseForPayment').value) : null;
             
             if (!account || !type || !amount || !concept || !date) {
                 showNotification("Por favor completa todos los campos", "warning");
@@ -1396,14 +2073,60 @@
                 type: type
             };
             
+            // Si es pago de gasto fijo, marcar el gasto como pagado
+            if (isFixedExpensePayment && fixedExpenseId) {
+                newTransaction.fixedExpenseId = fixedExpenseId;
+                
+                // Actualizar el gasto fijo
+                const expenseIndex = fixedExpenses.findIndex(e => e.id === fixedExpenseId);
+                if (expenseIndex !== -1) {
+                    fixedExpenses[expenseIndex].lastPaid = date;
+                    saveFixedExpenses();
+                }
+            }
+            
             accounts[account].transactions.push(newTransaction);
             saveData();
             updateUI();
             loadTransactions();
-            loadAccountsTab(); // Actualizar pestaña de cuentas
+            loadAccountsTab();
+            loadFixedExpenses();
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
             showNotification(`Transacción añadida a ${accounts[account].name}`, "success");
+        }
+
+        function addFixedExpense() {
+            const name = document.getElementById('fixedExpenseName').value;
+            const amount = parseFloat(document.getElementById('fixedExpenseAmount').value);
+            const day = document.getElementById('fixedExpenseDay').value;
+            const account = document.getElementById('fixedExpenseAccount').value;
+            const category = document.getElementById('fixedExpenseCategory').value;
+            const active = document.getElementById('fixedExpenseActive').value === 'true';
+            
+            if (!name || !amount || !day) {
+                showNotification("Por favor completa los campos obligatorios", "warning");
+                return;
+            }
+            
+            const newExpense = {
+                id: Date.now(),
+                name: name,
+                amount: amount,
+                day: day,
+                account: account || null,
+                category: category || '',
+                active: active,
+                lastPaid: null,
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+            
+            fixedExpenses.push(newExpense);
+            saveFixedExpenses();
+            loadFixedExpenses();
+            document.getElementById('fixedExpenseModal').classList.remove('active');
+            resetFixedExpenseForm();
+            showNotification(`Gasto fijo "${name}" añadido`, "success");
         }
 
         function updateTransaction() {
@@ -1414,6 +2137,8 @@
             const amount = parseFloat(document.getElementById('amount').value);
             const concept = document.getElementById('concept').value;
             const date = document.getElementById('date').value;
+            const isFixedExpensePayment = document.getElementById('markAsFixedExpensePayment').checked;
+            const fixedExpenseId = isFixedExpensePayment ? parseInt(document.getElementById('fixedExpenseForPayment').value) : null;
             
             if (!newAccount || !type || !amount || !concept || !date) {
                 showNotification("Por favor completa todos los campos", "warning");
@@ -1429,6 +2154,24 @@
                 type: type
             };
             
+            // Si es pago de gasto fijo, marcar el gasto como pagado
+            if (isFixedExpensePayment && fixedExpenseId) {
+                updatedTransaction.fixedExpenseId = fixedExpenseId;
+                
+                // Actualizar el gasto fijo
+                const expenseIndex = fixedExpenses.findIndex(e => e.id === fixedExpenseId);
+                if (expenseIndex !== -1) {
+                    fixedExpenses[expenseIndex].lastPaid = date;
+                    saveFixedExpenses();
+                }
+            } else {
+                // Si se estaba marcando como pago de gasto fijo y ya no lo es, limpiar
+                const originalTransaction = accounts[originalAccount].transactions.find(t => t.id === transactionId);
+                if (originalTransaction && originalTransaction.fixedExpenseId) {
+                    // No revertimos el lastPaid del gasto fijo para mantener historial
+                }
+            }
+            
             if (originalAccount !== newAccount) {
                 accounts[originalAccount].transactions = accounts[originalAccount].transactions.filter(t => t.id !== transactionId);
                 accounts[newAccount].transactions.push(updatedTransaction);
@@ -1442,10 +2185,123 @@
             saveData();
             updateUI();
             loadTransactions();
-            loadAccountsTab(); // Actualizar pestaña de cuentas
+            loadAccountsTab();
+            loadFixedExpenses();
             document.getElementById('transactionModal').classList.remove('active');
             resetTransactionForm();
             showNotification(`Transacción actualizada`, "success");
+        }
+
+        function updateFixedExpense() {
+            const expenseId = parseInt(document.getElementById('fixedExpenseId').value);
+            const name = document.getElementById('fixedExpenseName').value;
+            const amount = parseFloat(document.getElementById('fixedExpenseAmount').value);
+            const day = document.getElementById('fixedExpenseDay').value;
+            const account = document.getElementById('fixedExpenseAccount').value;
+            const category = document.getElementById('fixedExpenseCategory').value;
+            const active = document.getElementById('fixedExpenseActive').value === 'true';
+            
+            if (!name || !amount || !day) {
+                showNotification("Por favor completa los campos obligatorios", "warning");
+                return;
+            }
+            
+            const expenseIndex = fixedExpenses.findIndex(e => e.id === expenseId);
+            if (expenseIndex !== -1) {
+                fixedExpenses[expenseIndex] = {
+                    ...fixedExpenses[expenseIndex],
+                    name: name,
+                    amount: amount,
+                    day: day,
+                    account: account || null,
+                    category: category || '',
+                    active: active
+                };
+                
+                saveFixedExpenses();
+                loadFixedExpenses();
+                document.getElementById('fixedExpenseModal').classList.remove('active');
+                resetFixedExpenseForm();
+                showNotification(`Gasto fijo "${name}" actualizado`, "success");
+            }
+        }
+
+        function payFixedExpense(expenseId) {
+            const expense = fixedExpenses.find(e => e.id === expenseId);
+            if (!expense) return;
+            
+            // Abrir modal de transacción prellenado
+            isEditing = false;
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Pagar Gasto Fijo';
+            document.getElementById('submitTransactionBtn').textContent = 'Pagar';
+            document.getElementById('deleteTransactionBtn').style.display = 'none';
+            
+            // Prellenar formulario
+            document.getElementById('account').value = expense.account || 'efectivo';
+            document.getElementById('type').value = 'egreso';
+            document.getElementById('amount').value = expense.amount;
+            document.getElementById('concept').value = expense.name;
+            setTodayDate();
+            
+            // Marcar como pago de gasto fijo
+            document.getElementById('isFixedExpensePayment').value = 'true';
+            document.getElementById('fixedExpensePaymentGroup').style.display = 'block';
+            document.getElementById('markAsFixedExpensePayment').checked = true;
+            document.getElementById('fixedExpenseForPayment').style.display = 'block';
+            loadFixedExpensesForPayment();
+            document.getElementById('fixedExpenseForPayment').value = expenseId;
+            
+            document.getElementById('transactionModal').classList.add('active');
+        }
+
+        function payAllPendingExpenses() {
+            const today = new Date();
+            const todayStr = formatDateForInput(today);
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            let totalAmount = 0;
+            let pendingCount = 0;
+            
+            fixedExpenses.forEach(expense => {
+                if (expense.active) {
+                    const lastPaidMonthYear = expense.lastPaid ? 
+                        `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+                    
+                    if (lastPaidMonthYear !== currentMonthYear) {
+                        totalAmount += expense.amount;
+                        pendingCount++;
+                        
+                        // Crear transacción para cada gasto pendiente
+                        const account = expense.account || 'efectivo';
+                        const transaction = {
+                            id: Date.now() + Math.random(),
+                            date: todayStr,
+                            concept: expense.name,
+                            amount: -expense.amount,
+                            type: 'egreso',
+                            fixedExpenseId: expense.id
+                        };
+                        
+                        accounts[account].transactions.push(transaction);
+                        
+                        // Marcar gasto como pagado
+                        expense.lastPaid = todayStr;
+                    }
+                }
+            });
+            
+            if (pendingCount > 0) {
+                saveData();
+                saveFixedExpenses();
+                updateUI();
+                loadTransactions();
+                loadAccountsTab();
+                loadFixedExpenses();
+                showNotification(`${pendingCount} gastos fijos pagados por un total de $${formatNumber(totalAmount)}`, "success");
+            } else {
+                showNotification("No hay gastos fijos pendientes", "info");
+            }
         }
 
         function showDeleteConfirmation(accountKey, transactionId, concept) {
@@ -1459,12 +2315,48 @@
             const transactionIndex = account.transactions.findIndex(t => t.id === transactionId);
             
             if (transactionIndex !== -1) {
+                // Verificar si era un pago de gasto fijo para limpiar lastPaid
+                const transaction = account.transactions[transactionIndex];
+                if (transaction.fixedExpenseId) {
+                    const expenseIndex = fixedExpenses.findIndex(e => e.id === transaction.fixedExpenseId);
+                    if (expenseIndex !== -1) {
+                        fixedExpenses[expenseIndex].lastPaid = null;
+                        saveFixedExpenses();
+                    }
+                }
+                
                 account.transactions.splice(transactionIndex, 1);
                 saveData();
                 updateUI();
                 loadTransactions();
-                loadAccountsTab(); // Actualizar pestaña de cuentas
+                loadAccountsTab();
+                loadFixedExpenses();
                 showNotification(`Transacción eliminada`, "success");
+            }
+        }
+
+        function deleteFixedExpenseConfirmation(expenseId) {
+            const expense = fixedExpenses.find(e => e.id === expenseId);
+            if (!expense) return;
+            
+            if (confirm(`¿Eliminar gasto fijo "${expense.name}"?`)) {
+                deleteFixedExpense(expenseId);
+            }
+        }
+
+        function deleteFixedExpense(expenseId) {
+            const expenseIndex = fixedExpenses.findIndex(e => e.id === expenseId);
+            if (expenseIndex !== -1) {
+                fixedExpenses.splice(expenseIndex, 1);
+                saveFixedExpenses();
+                loadFixedExpenses();
+                showNotification(`Gasto fijo eliminado`, "success");
+            }
+            
+            // Cerrar modal si está abierto
+            if (isEditingFixedExpense && currentEditFixedExpenseId === expenseId) {
+                document.getElementById('fixedExpenseModal').classList.remove('active');
+                resetFixedExpenseForm();
             }
         }
 
@@ -1480,32 +2372,84 @@
             isEditing = false;
             currentEditId = null;
             document.getElementById('transactionForm').reset();
-            document.getElementById('date').valueAsDate = new Date();
+            setTodayDate();
             document.getElementById('transactionId').value = '';
             document.getElementById('originalAccount').value = '';
+            document.getElementById('isFixedExpensePayment').value = 'false';
+            document.getElementById('fixedExpensePaymentGroup').style.display = 'none';
+            document.getElementById('markAsFixedExpensePayment').checked = false;
+            document.getElementById('fixedExpenseForPayment').style.display = 'none';
             document.getElementById('deleteTransactionBtn').style.display = 'none';
+        }
+
+        function resetFixedExpenseForm() {
+            isEditingFixedExpense = false;
+            currentEditFixedExpenseId = null;
+            document.getElementById('fixedExpenseForm').reset();
+            document.getElementById('fixedExpenseId').value = '';
+            document.getElementById('fixedExpenseActive').value = 'true';
+            document.getElementById('deleteFixedExpenseBtn').style.display = 'none';
+        }
+
+        // Verificar recordatorios al cargar la aplicación
+        function checkReminders() {
+            const today = new Date();
+            const currentDay = today.getDate();
+            const currentMonthYear = `${today.getFullYear()}-${today.getMonth() + 1}`;
+            
+            let pendingReminders = [];
+            
+            fixedExpenses.forEach(expense => {
+                if (expense.active) {
+                    const reminderDay = parseInt(expense.day);
+                    const lastPaidMonthYear = expense.lastPaid ? 
+                        `${new Date(expense.lastPaid).getFullYear()}-${new Date(expense.lastPaid).getMonth() + 1}` : '';
+                    
+                    // Si no se ha pagado este mes y hoy es el día de recordatorio
+                    if (lastPaidMonthYear !== currentMonthYear && currentDay === reminderDay) {
+                        pendingReminders.push(expense);
+                    }
+                }
+            });
+            
+            if (pendingReminders.length > 0) {
+                let reminderMessage = `Recordatorio: Tienes ${pendingReminders.length} gasto(s) fijo(s) pendiente(s) para hoy:\n`;
+                pendingReminders.forEach((expense, index) => {
+                    reminderMessage += `${index + 1}. ${expense.name} - $${formatNumber(expense.amount)}\n`;
+                });
+                
+                showNotification(reminderMessage, "warning", 8000);
+            }
         }
 
         // Funciones de respaldo
         function sendBackupByEmail() {
             const csvData = generateCSVData();
+            const fixedExpensesCSV = generateFixedExpensesCSVData();
             const filename = `antologia_cuentas_${new Date().toISOString().slice(0,10)}.csv`;
+            const filenameFixed = `antologia_gastos_fijos_${new Date().toISOString().slice(0,10)}.csv`;
             
-            // Crear blob y URL
+            // Crear blobs
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+            const blobFixed = new Blob([fixedExpensesCSV], { type: 'text/csv;charset=utf-8;' });
             
-            // Crear enlace para descargar
+            // Crear enlaces para descargar
             const link = document.createElement('a');
-            link.href = url;
+            link.href = URL.createObjectURL(blob);
             link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            // Mostrar instrucciones para email
+            const linkFixed = document.createElement('a');
+            linkFixed.href = URL.createObjectURL(blobFixed);
+            linkFixed.download = filenameFixed;
+            document.body.appendChild(linkFixed);
+            linkFixed.click();
+            document.body.removeChild(linkFixed);
+            
             showNotification(
-                "Archivo CSV descargado. Ábrelo en tu app de email y envíalo a tu correo como adjunto.",
+                "Archivos CSV descargados. Ábrelos en tu app de email y envíalos a tu correo como adjuntos.",
                 "info",
                 5000
             );
@@ -1513,9 +2457,13 @@
 
         function downloadBackup() {
             const csvData = generateCSVData();
+            const fixedExpensesCSV = generateFixedExpensesCSVData();
             const filename = `antologia_cuentas_${new Date().toISOString().slice(0,10)}.csv`;
+            const filenameFixed = `antologia_gastos_fijos_${new Date().toISOString().slice(0,10)}.csv`;
             
             const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const blobFixed = new Blob([fixedExpensesCSV], { type: 'text/csv;charset=utf-8;' });
+            
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             
@@ -1525,22 +2473,39 @@
             link.click();
             document.body.removeChild(link);
             
-            showNotification("Archivo CSV descargado", "success");
+            const linkFixed = document.createElement('a');
+            const urlFixed = URL.createObjectURL(blobFixed);
+            
+            linkFixed.href = urlFixed;
+            linkFixed.download = filenameFixed;
+            document.body.appendChild(linkFixed);
+            linkFixed.click();
+            document.body.removeChild(linkFixed);
+            
+            showNotification("Archivos CSV descargados", "success");
         }
 
         function generateCSVData() {
-            let csvContent = "Cuenta,Fecha,Concepto,Monto,Tipo\n";
+            let csvContent = "Cuenta,Fecha,Concepto,Monto,Tipo,GastoFijoID\n";
             
             for (const accountKey in accounts) {
                 const account = accounts[accountKey];
                 account.transactions.forEach(transaction => {
                     const tipo = transaction.amount >= 0 ? "Ingreso" : "Egreso";
-                    // Asegurar que la fecha se guarde en formato correcto (YYYY-MM-DD)
-                    const transactionDate = new Date(transaction.date);
-                    const formattedDate = transactionDate.toISOString().split('T')[0];
-                    csvContent += `"${account.name}","${formattedDate}","${transaction.concept}",${transaction.amount},"${tipo}"\n`;
+                    const gastoFijoID = transaction.fixedExpenseId || '';
+                    csvContent += `"${account.name}","${transaction.date}","${transaction.concept}",${transaction.amount},"${tipo}","${gastoFijoID}"\n`;
                 });
             }
+            
+            return csvContent;
+        }
+
+        function generateFixedExpensesCSVData() {
+            let csvContent = "ID,Nombre,Monto,Dia,Cuenta,Categoria,Activo,UltimoPago,Creado\n";
+            
+            fixedExpenses.forEach(expense => {
+                csvContent += `"${expense.id}","${expense.name}",${expense.amount},${expense.day},"${expense.account || ''}","${expense.category}","${expense.active}","${expense.lastPaid || ''}","${expense.createdAt}"\n`;
+            });
             
             return csvContent;
         }
@@ -1565,7 +2530,8 @@
                     const lines = content.split('\n');
                     processCSVData(lines);
                     clearFileInput();
-                    loadAccountsTab(); // Actualizar pestaña de cuentas
+                    loadAccountsTab();
+                    loadFixedExpenses();
                     showNotification("Datos importados correctamente", "success");
                 } catch (error) {
                     console.error("Error al importar:", error);
@@ -1598,8 +2564,10 @@
                     let fecha = columns[1].trim();
                     const concepto = columns[2].trim();
                     const monto = parseFloat(columns[3].trim());
+                    const tipo = columns.length > 4 ? columns[4].trim() : (monto >= 0 ? "Ingreso" : "Egreso");
+                    const gastoFijoID = columns.length > 5 ? columns[5].trim() : null;
                     
-                    // Corregir problema de fecha (convertir a formato YYYY-MM-DD)
+                    // Corregir problema de fecha
                     fecha = fixDateFormat(fecha);
                     
                     // Determinar cuenta
@@ -1613,8 +2581,13 @@
                         date: fecha,
                         concept: concepto,
                         amount: monto,
-                        type: monto >= 0 ? "ingreso" : "egreso"
+                        type: tipo.toLowerCase().includes('ingreso') ? "ingreso" : "egreso"
                     };
+                    
+                    // Si hay ID de gasto fijo, agregarlo
+                    if (gastoFijoID && gastoFijoID !== '') {
+                        transaction.fixedExpenseId = parseInt(gastoFijoID);
+                    }
                     
                     accounts[accountKey].transactions.push(transaction);
                 }
@@ -1653,22 +2626,19 @@
                 return dateString;
             }
             
-            // Si está en formato DD/MM/YYYY o similar, convertirla
-            const date = new Date(dateString);
-            if (isNaN(date.getTime())) {
-                // Si no se puede parsear, devolver la fecha actual
-                return new Date().toISOString().split('T')[0];
+            // Si está en formato DD/MM/YYYY, convertirla
+            if (dateString.includes('/')) {
+                const parts = dateString.split('/');
+                if (parts.length === 3) {
+                    const day = parts[0].padStart(2, '0');
+                    const month = parts[1].padStart(2, '0');
+                    const year = parts[2];
+                    return `${year}-${month}-${day}`;
+                }
             }
             
-            // Ajustar por problema de zona horaria (agregar un día si es necesario)
-            const correctedDate = new Date(date.getTime() + (24 * 60 * 60 * 1000));
-            
-            // Formatear como YYYY-MM-DD
-            const year = correctedDate.getFullYear();
-            const month = String(correctedDate.getMonth() + 1).padStart(2, '0');
-            const day = String(correctedDate.getDate()).padStart(2, '0');
-            
-            return `${year}-${month}-${day}`;
+            // Si no se puede parsear, devolver la fecha actual
+            return formatDateForInput(new Date());
         }
 
         function clearFileInput() {
@@ -1681,12 +2651,53 @@
             localStorage.setItem('accountsData', JSON.stringify(accounts));
         }
 
+        function saveFixedExpenses() {
+            localStorage.setItem('fixedExpensesData', JSON.stringify(fixedExpenses));
+        }
+
         function formatNumber(number) {
             return Math.abs(number).toLocaleString('es-CO');
         }
 
-        function formatDate(dateString) {
+        // CORRECCIÓN: Función para parsear fecha sin problemas de zona horaria
+        function parseDateString(dateString) {
+            if (!dateString) return new Date();
+            
+            // Si ya es un objeto Date, devolverlo
+            if (dateString instanceof Date) return dateString;
+            
+            // Si está en formato YYYY-MM-DD, crear fecha local
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                const parts = dateString.split('-');
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            }
+            
+            // Intentar parsear como fecha ISO
             const date = new Date(dateString);
+            if (!isNaN(date.getTime())) return date;
+            
+            // Si no se puede parsear, devolver fecha actual
+            return new Date();
+        }
+
+        // Función para formatear fecha para input (YYYY-MM-DD)
+        function formatDateForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // CORRECCIÓN: Función para mostrar fecha en formato DD/MM/YYYY
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            
+            const date = parseDateString(dateString);
+            
+            if (isNaN(date.getTime())) {
+                return dateString;
+            }
+            
             // Usar fecha local para evitar problemas de zona horaria
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -1696,6 +2707,10 @@
         }
 
         function showNotification(message, type = "info", duration = 3000) {
+            // Eliminar notificaciones anteriores
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
             const notification = document.createElement('div');
             notification.className = 'notification';
             
@@ -1703,6 +2718,7 @@
             if (type === "success") bgColor = "var(--success-color)";
             if (type === "warning") bgColor = "var(--warning-color)";
             if (type === "danger") bgColor = "var(--danger-color)";
+            if (type === "info") bgColor = "var(--info-color)";
             
             notification.style.backgroundColor = bgColor;
             notification.textContent = message;
